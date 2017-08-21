@@ -8,8 +8,6 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Margin="122,118,0,0" Name="MessageButton">
-            <Button Content="Button" Click="Button_Click"/>
-        </Button>
+        <Button Content="Button" Click="Button_Click" Name="MessageButton" Margin="125,140,0,468"/>
     </Grid>
 </Page>
