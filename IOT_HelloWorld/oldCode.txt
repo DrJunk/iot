@@ -1,0 +1,287 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
+using Windows.Devices.Gpio;
+using System.Diagnostics;
+
+using Windows.Devices.Pwm;
+using Microsoft.IoT.Lightning.Providers;
+using Windows.Devices;
+
+namespace IOT_HelloWorld
+{
+/// <summary>
+  /// An empty page that can be used on its own or navigated to within a Frame.
+  ///
+</summary>
+
+public sealed partial class MainPage : Page
+{
+private const int IR_LED_PIN = 4;
+private const int RCV_PIN = 18;
+
+private GpioPin irReceiver;
+private GpioPin irLED;
+private PwmPin pwmLED;
+
+private DispatcherTimer timer;
+private GpioPinValue pushButtonValue;
+private GpioPinValue irLEDValue;
+
+Stopwatch receiverStopWatch;
+Stopwatch transmitterStopWatch;
+
+int flipsAmount = 0;
+long oldFlipTime, currentFlipTime = 0;
+long oldFlipTime2 = 0, currentFlipTime2 = 0;
+string debugString = "";
+
+List<long>
+  flipdebugString = new List<long>
+    ();
+    bool recording = false;
+
+    RCSwitch irSwitch = new RCSwitch();
+
+    public MainPage()
+    {
+    InitializeComponent();
+
+    timer = new DispatcherTimer();
+    timer.Interval = TimeSpan.FromMilliseconds(10);
+    timer.Tick += Timer_Tick;
+    timer.Start();
+
+    receiverStopWatch = new Stopwatch();
+    receiverStopWatch.Start();
+
+    transmitterStopWatch = new Stopwatch();
+
+    Unloaded += MainPage_Unloaded;
+
+    InitGPIO();
+    }
+
+    private async void InitGPIO()
+    {
+    // IR LED using GPIO
+
+    /*
+    irLED = gpio.OpenPin(IR_LED_PIN);
+    irLED.Write(GpioPinValue.Low);
+    irLED.SetDriveMode(GpioPinDriveMode.Output);
+    */
+    //irSwitch.EnableTransmit(IR_LED_PIN);
+
+
+    // IR LED using PWM
+
+    if (LightningProvider.IsLightningEnabled)
+    {
+    LowLevelDevicesController.DefaultProvider = LightningProvider.GetAggregateProvider();
+
+    var pwmControllers = await PwmController.GetControllersAsync(LightningPwmProvider.GetPwmProvider());
+    var pwmController = pwmControllers[1]; // the on-device controller
+    pwmController.SetDesiredFrequency(40); // try to match 50Hz
+
+    pwmLED = pwmController.OpenPin(IR_LED_PIN);
+    pwmLED.SetActiveDutyCyclePercentage(0);
+    pwmLED.Start();
+    }
+
+    var gpio = GpioController.GetDefault();
+
+    if (gpio == null)
+    {
+    GpioStatus.Text = "There is no GPIO controller on this device.";
+    return;
+    }
+
+    // Initailize IR REceiver
+    irReceiver = gpio.OpenPin(RCV_PIN);
+    irReceiver.SetDriveMode(GpioPinDriveMode.Input);
+
+    // Run the recording functions
+    irReceiver.ValueChanged += OnSignalChange;
+    //irReceiver.ValueChanged += RecordChange;
+
+    GpioStatus.Text = "GPIO pin initialized correctly.";
+    }
+
+    private void MainPage_Unloaded(object sender, object args)
+    {
+    irReceiver.Dispose();
+    irLED.Dispose();
+    }
+
+    // function for recording into a list the flipping debugString for the receiver
+    private void RecordChange(object sender, object args)
+    {
+    currentFlipTime2 = receiverStopWatch.ElapsedTicks;
+    if (recording)
+    {
+    if (oldFlipTime2 != 0)
+    flipdebugString.Add(currentFlipTime2 - oldFlipTime2);
+    oldFlipTime2 = currentFlipTime2;
+    }
+    }
+
+    private void OnSignalChange(object sender, object args)
+    {
+    currentFlipTime = receiverStopWatch.ElapsedTicks;
+
+    if (flipsAmount % 2 == 1)
+    {
+    //debugString += (currentFlipTime - oldFlipTime) + " ";
+
+    if ((currentFlipTime - oldFlipTime) < 16000)
+                    debugString += "0";
+                else if ((currentFlipTime - oldFlipTime) >= 16000)
+                    debugString += "1";
+                else
+                    debugString += "?";
+            }
+            // debugString += " " + (currentFlipTime - oldFlipTime);
+            flipsAmount++;
+
+            // break line if too long
+            if (flipsAmount % 100 == 0)
+                debugString += "\n";
+
+            // break line in the end of a signal
+            if ((currentFlipTime - oldFlipTime) >= 1000000)
+            {
+                debugString += "\n";
+                flipsAmount = 0;
+            }
+
+            oldFlipTime = currentFlipTime;
+        }
+
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            //pwmLED.SetActiveDutyCyclePercentage(1);
+            //irSwitch.Send("0000000000000000000000000000000000");
+
+            long totalTime = 0;
+            //debugString += "\n\n";
+            foreach (long time in flipdebugString)
+            {
+                //debugString += time.ToString() + ", ";
+            }
+            List<long>
+      testlist = new List<long>
+        ();
+        long lastTotal = 0;
+        long currentFlipTimeTotal;
+        transmitterStopWatch.Restart();
+        foreach (long time in flipdebugString)
+        {
+        totalTime += time;
+        currentFlipTimeTotal = transmitterStopWatch.ElapsedTicks;
+        while (currentFlipTimeTotal < totalTime)
+                {
+                    currentFlipTimeTotal = transmitterStopWatch.ElapsedTicks;
+                    // Wait
+                }
+                testlist.Add(currentFlipTimeTotal - lastTotal);
+                lastTotal = currentFlipTimeTotal;
+
+                FlipIrLED();
+            }
+            transmitterStopWatch.Stop();
+            //debugString += "\n";
+            foreach (long time in testlist)
+            {
+                //debugString += time.ToString() + ", ";
+            }
+        }
+
+        private void btnRecord_Click(object sender, RoutedEventArgs e)
+        {
+            if (recording)
+            {
+                btnRecord.Content = "Record";
+                recording = false;
+            }
+            else
+            {
+                btnRecord.Content = "Stop";
+                recording = true;
+            }
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            flipdebugString.Clear();
+            oldFlipTime2 = 0;
+        }
+
+        private void FlipLED()
+        {
+            
+            //if (pushButtonValue != irReceiver.Read())/
+            /*
+            pushButtonValue = irReceiver.Read();
+
+            if (pushButtonValue == GpioPinValue.High)
+            {
+                //pin.Write(GpioPinValue.Low);
+            }
+            else if (pushButtonValue == GpioPinValue.Low)
+            {
+                //pin.Write(GpioPinValue.High);
+            }*/
+            
+            GpioStatus.Text = debugString;
+        }
+
+        private void FlipIrLED()
+        {
+            /*
+            irLEDValue = irLED.Read();
+
+            if (irLEDValue == GpioPinValue.High)
+            {
+                irLED.Write(GpioPinValue.Low);
+            }
+            else if (irLEDValue == GpioPinValue.Low)
+            {
+                irLED.Write(GpioPinValue.High);
+            }*/
+            
+            if (pwmLED.GetActiveDutyCyclePercentage() < 0.25f)
+                pwmLED.SetActiveDutyCyclePercentage(0.5f);
+            else
+                pwmLED.SetActiveDutyCyclePercentage(0);
+
+            //GpioStatus.Text = debugString;
+        }
+
+        /*
+		private void OutputdebugString() {
+		i = flipdebugString.GetEnumerator();
+		for i ??
+			if outputFlip == false
+				irLED.write(GpioPinValue.High)
+			else
+				irLED.write(GpioPinValue.Low)
+		}
+		     */
+        private void Timer_Tick(object sender, object e)
+        {
+            FlipLED();
+        }
+    }
+}
