@@ -30,7 +30,7 @@ namespace IoT_Device
             this.InitializeComponent();
 
             AzureIoTHub.Init();
-            //AzureIoTHub.SendDeviceToCloudMessageAsync();
+            
             Task<string> task = AzureIoTHub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMsg(x.Result));
         }
@@ -38,6 +38,9 @@ namespace IoT_Device
         public void HandleMsg(string message)
         {
             buttonText = message;
+
+            Task<string> task = AzureIoTHub.ReceiveCloudToDeviceMessageAsync();
+            task.ContinueWith(x => HandleMsg(x.Result));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
