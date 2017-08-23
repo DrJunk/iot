@@ -23,9 +23,9 @@ namespace IoT_Device
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        string buttonText = "Button";
-        IRControl irc;
         AzureIoTHub hub;
+        IRControl irc;
+        IRMessage recorded;
 
         public MainPage()
         {
@@ -35,15 +35,25 @@ namespace IoT_Device
             hub = new AzureIoTHub();
             Unloaded += MainPage_Unloaded;
 
+
+
+            /* this code gave me cancer
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
-            task.ContinueWith(x => HandleMsg(x.Result));
-            
+            task.ContinueWith(x => HandleMessage(x.Result));
+            */
 
         }
 
-        public void HandleMsg(string message)
+        /* this is how we boogie
+        public async void Test()
         {
-            buttonText = message;
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            MessageButton.Content = "wuuttt";
+        }*/
+
+        public void HandleMessage(string message)
+        {
+            messageButton.Content = message;
             /*
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMsg(x.Result));*/
@@ -51,8 +61,7 @@ namespace IoT_Device
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            MessageButton.Content = buttonText;
-            Task t = hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + buttonText);
+            Task t = hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + messageButton.Content.ToString());
         }
 
         private void Button_Record(object sender, RoutedEventArgs e)
@@ -66,9 +75,15 @@ namespace IoT_Device
             {
                 IRMessage msg = irc.EndRecording();
                 recordButton.Content = "Start Recording";
-                //mainText.Text = msg.encode();
+                mainText.Text = msg.ToString() + "\n";
                 mainText.Text += msg.ParseToBits() + "\n" + msg.ParseToRemoteButton() + "\n";
+                recorded = msg;
             }
+        }
+
+        private void Button_Transmit(object sender, RoutedEventArgs e)
+        {
+            irc.Transmit(recorded);
         }
 
         private void MainPage_Unloaded(object sender, object args)

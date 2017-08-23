@@ -39,6 +39,18 @@ public class IRMessage
         return encoding;
     }
 
+    // for visual use only!
+    override public string ToString()
+    {
+        string str = "";
+        foreach (double element in this.intervalList)
+        {
+            str += element.ToString("#.00") + ",";
+        }
+        str += seperator + startingState.ToString();
+        return str;
+    }
+
     public string ParseToBits()
     {
         string parsed = "";
