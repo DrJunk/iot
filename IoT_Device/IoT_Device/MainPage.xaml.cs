@@ -24,29 +24,53 @@ namespace IoT_Device
     public sealed partial class MainPage : Page
     {
         string buttonText = "Button";
+        IRControl irc;
+        AzureIoTHub hub;
 
         public MainPage()
         {
             this.InitializeComponent();
 
+            irc = new IRControl();
+            hub = new AzureIoTHub();
+
+            /*
             AzureIoTHub.Init();
             
             Task<string> task = AzureIoTHub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMsg(x.Result));
+            */
+
         }
 
         public void HandleMsg(string message)
         {
             buttonText = message;
 
-            Task<string> task = AzureIoTHub.ReceiveCloudToDeviceMessageAsync();
+            Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMsg(x.Result));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MessageButton.Content = buttonText;
-            AzureIoTHub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + buttonText);
+            hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + buttonText);
+        }
+
+        private void Button_Record(object sender, RoutedEventArgs e)
+        {
+            if (recordButton.Content.ToString().Equals("Start Recording"))
+            {
+                irc.StartRecording();
+                recordButton.Content = "Stop Recording";
+            }
+            else
+            {
+                IRMessage msg = irc.EndRecording();
+                recordButton.Content = "Start Recording";
+                //mainText.Text = msg.encode();
+                mainText.Text += msg.ParseToBits() + "\n" + msg.ParseToRemoteButton() + "\n";
+            }
         }
     }
 }

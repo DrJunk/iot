@@ -56,8 +56,8 @@ namespace IOT_HelloWorld
 
             stopWatch = new Stopwatch();
             stopWatch.Start();
-
             Unloaded += MainPage_Unloaded;
+
 
             InitGPIO();
         }
@@ -242,8 +242,11 @@ namespace IOT_HelloWorld
         {
             long ticksPassed = (changeRecord.RelativeTime - oldTime).Ticks;
 
-            if (oldTime != null)
-                debugString += ticksPassed + " ";
+
+            if (oldTime != null) {
+                //debugString += ticksPassed + " ";
+                debugString += (changeRecord.RelativeTime - oldTime).TotalMilliseconds + "," + ticksPassed + " ";
+            }
 
             //if (flipsAmount % 2 == 1)
             {

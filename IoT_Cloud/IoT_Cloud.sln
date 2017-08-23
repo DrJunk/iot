@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.26730.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoT_Cloud", "IoT_Cloud\IoT_Cloud.csproj", "{34A6B8C1-7A63-4D53-9A50-F78BCF477CF1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F916DB7-F552-4603-8259-DF6DD3B89444}"
+	ProjectSection(SolutionItems) = preProject
+		..\Helper_Files\IRMessage.cs = ..\Helper_Files\IRMessage.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

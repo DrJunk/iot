@@ -31,13 +31,13 @@
     <AppXManifest Include="E:\University\IOT\iot\IOT_HelloWorld\bin\ARM\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-08-21T09:02:40.456</Modified>
+      <Modified>2017-08-23T11:47:28.779</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="E:\University\IOT\iot\IOT_HelloWorld\bin\ARM\Debug\IOT_HelloWorld.exe">
       <PackagePath>entrypoint\IOT_HelloWorld.exe</PackagePath>
-      <Modified>2017-08-21T09:02:39.948</Modified>
+      <Modified>2017-08-23T11:47:28.489</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Omer\.nuget\packages\Microsoft.CSharp\4.0.1\lib\netcore50\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -688,11 +688,11 @@
     <AppxPackagedFile Include="E:\University\IOT\iot\IOT_HelloWorld\bin\ARM\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2017-08-21T08:15:50.126</Modified>
+      <Modified>2017-08-23T11:44:00.519</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="E:\University\IOT\iot\IOT_HelloWorld\bin\ARM\Debug\Core\IOT_HelloWorld.exe">
       <PackagePath>IOT_HelloWorld.exe</PackagePath>
-      <Modified>2017-08-21T09:02:40.444</Modified>
+      <Modified>2017-08-23T11:47:28.776</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

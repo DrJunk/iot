@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
 
 
-static class AzureIoTHub
+class AzureIoTHub
 {
     //
     // Note: this connection string is specific to the device "ourDeviceID". To configure other devices,
@@ -21,21 +21,22 @@ static class AzureIoTHub
 
     // Refer to http://aka.ms/azure-iot-hub-vs-cs-wiki for more information on Connected Service for Azure IoT Hub
 
-    static DeviceClient deviceClient;
+    DeviceClient deviceClient;
 
-    public static void Init()
+    public AzureIoTHub()
     {
         deviceClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
+
     }
 
-    public static async Task SendDeviceToCloudMessageAsync(string message)
+    public async Task SendDeviceToCloudMessageAsync(string message)
     {
         var msg = new Message(Encoding.ASCII.GetBytes(message));
 
         await deviceClient.SendEventAsync(msg);
     }
 
-    public static async Task<string> ReceiveCloudToDeviceMessageAsync()
+    public async Task<string> ReceiveCloudToDeviceMessageAsync()
     {
         //var deviceClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
 
