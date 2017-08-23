@@ -1,1 +1,0 @@
-C:\Users\Omer\documents\visual studio 2017\Projects\IOT_HelloWorld\IOT_HelloWorld\IOT_HelloWorld.csproj;x86

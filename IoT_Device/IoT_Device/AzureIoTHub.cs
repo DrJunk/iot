@@ -26,13 +26,11 @@ class AzureIoTHub
     public AzureIoTHub()
     {
         deviceClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
-
     }
 
     public async Task SendDeviceToCloudMessageAsync(string message)
     {
         var msg = new Message(Encoding.ASCII.GetBytes(message));
-
         await deviceClient.SendEventAsync(msg);
     }
 

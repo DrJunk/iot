@@ -33,28 +33,26 @@ namespace IoT_Device
 
             irc = new IRControl();
             hub = new AzureIoTHub();
+            Unloaded += MainPage_Unloaded;
 
-            /*
-            AzureIoTHub.Init();
-            
-            Task<string> task = AzureIoTHub.ReceiveCloudToDeviceMessageAsync();
+            Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMsg(x.Result));
-            */
+            
 
         }
 
         public void HandleMsg(string message)
         {
             buttonText = message;
-
+            /*
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
-            task.ContinueWith(x => HandleMsg(x.Result));
+            task.ContinueWith(x => HandleMsg(x.Result));*/
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             MessageButton.Content = buttonText;
-            hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + buttonText);
+            Task t = hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + buttonText);
         }
 
         private void Button_Record(object sender, RoutedEventArgs e)
@@ -71,6 +69,11 @@ namespace IoT_Device
                 //mainText.Text = msg.encode();
                 mainText.Text += msg.ParseToBits() + "\n" + msg.ParseToRemoteButton() + "\n";
             }
+        }
+
+        private void MainPage_Unloaded(object sender, object args)
+        {
+            irc.Close();
         }
     }
 }

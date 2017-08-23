@@ -21,10 +21,8 @@ namespace IoT_Cloud
 
 
             IRMessage newMessage = new IRMessage(new List<double>(new double[] { 1, 2, 1, 2}), true);
-            string encoded = newMessage.encode();
+            string encoded = newMessage.Encode();
             Console.WriteLine("encoded: " + encoded);
-            IRMessage decoded = new IRMessage(encoded);
-            Console.WriteLine("encoded after decoding: " + decoded.encode());
 
             Console.WriteLine("Write a message!");
             string message = Console.ReadLine();

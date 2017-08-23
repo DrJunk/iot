@@ -8,7 +8,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Button Content="Button" Click="Button_Click" Name="MessageButton" Margin="29,38,0,570"/>
+        <Button Content="Button" Click="Button_Click" Name="MessageButton" Margin="29,38,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <Button Content="Start Recording" Click="Button_Record" HorizontalAlignment="Left" Name="recordButton" Margin="142,38,0,0" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="29,100,0,0" TextWrapping="Wrap" Name="mainText" Text="Welcome!!" VerticalAlignment="Top" Width="315"/>
     </Grid>
