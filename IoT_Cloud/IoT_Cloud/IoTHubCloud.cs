@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
@@ -49,7 +47,7 @@ namespace IoT_Cloud
                 if (eventData == null) continue;
 
                 string data = Encoding.UTF8.GetString(eventData.GetBytes());
-                Console.WriteLine("Message received: '{0}'", data);
+                HandleData(data);
             }
         }
 
@@ -57,6 +55,19 @@ namespace IoT_Cloud
         {
             var commandMessage = new Message(Encoding.ASCII.GetBytes(message));
             await serviceClient.SendAsync("MainDevice", commandMessage);
+        }
+
+        public void HandleData(string data)
+        {
+            if (data.StartsWith("irMSG:"))
+            {
+                IRMessage msg = new IRMessage(data.Substring("irMsg:".Length));
+                Console.WriteLine("Recording received: '{0}'", msg.ToString());
+            }
+            else
+            {
+                Console.WriteLine("Message received: '{0}'", data);
+            }
         }
     }
 }

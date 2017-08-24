@@ -95,7 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AzureIoTHub.cs" />
+    <Compile Include="IoTHubDevice.cs" />
     <Compile Include="IRControl.cs" />
     <Compile Include="IRMessage.cs" />
     <Compile Include="MainPage.xaml.cs">

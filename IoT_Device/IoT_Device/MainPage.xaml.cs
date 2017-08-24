@@ -39,10 +39,10 @@ namespace IoT_Device
 
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));
-            
+
         }
 
-        /* this is how we boogie
+        /* this is how we boogie (wait)
         public async void Test()
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
@@ -56,17 +56,23 @@ namespace IoT_Device
             Task<string> task;
             if (message.StartsWith("transmit:"))
             {
-                irMsg = new IRMessage(message.Substring(9));
+                irMsg = new IRMessage(message.Substring("transmit:".Length));
                 irc.Transmit(irMsg);
+                hub.SendDeviceToCloudMessageAsync("OK");
             }
             else if (message.StartsWith("startRecording"))
             {
                 irc.StartRecording();
+                hub.SendDeviceToCloudMessageAsync("OK");
             }
             else if (message.StartsWith("endRecording"))
             {
                 irMsg = irc.EndRecording();
-                hub.SendDeviceToCloudMessageAsync("irMSG" + irMsg.Encode());
+                hub.SendDeviceToCloudMessageAsync("irMsg:" + irMsg.Encode());
+            }
+            else
+            {
+                hub.SendDeviceToCloudMessageAsync("wtf do you want");
             }
             task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));

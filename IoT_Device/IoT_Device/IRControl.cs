@@ -78,7 +78,8 @@ namespace IoT_Device
             stopwatch.Stop();
         }
 
-        public void StartRecording() {
+        public void StartRecording()
+        {
             irReceiverReader.Start();
         }
 
