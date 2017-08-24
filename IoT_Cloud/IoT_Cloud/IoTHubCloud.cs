@@ -29,8 +29,8 @@ namespace IoT_Cloud
         public async Task ListenForMessagesFromDeviceAsync()
         {
             string[] d2cPartitions;
-
             d2cPartitions = eventHubClient.GetRuntimeInformation().PartitionIds;
+
             foreach (string partition in d2cPartitions)
             {
                 var receiver = eventHubClient.GetDefaultConsumerGroup().

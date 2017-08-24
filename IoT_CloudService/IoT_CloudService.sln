@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "IoT_CloudService", "IoT_CloudService\IoT_CloudService.ccproj", "{3BE7A8FE-48A1-4B51-98CF-E1E7D2D5D2DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BE7A8FE-48A1-4B51-98CF-E1E7D2D5D2DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE7A8FE-48A1-4B51-98CF-E1E7D2D5D2DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE7A8FE-48A1-4B51-98CF-E1E7D2D5D2DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE7A8FE-48A1-4B51-98CF-E1E7D2D5D2DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {83565BC7-C481-4710-A83B-77F9724248E6}
+	EndGlobalSection
+EndGlobal
