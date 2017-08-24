@@ -52,7 +52,7 @@ namespace IoT_Device
             irReceiver = gpio.OpenPin(IR_RCV_PIN, GpioSharingMode.Exclusive);
             irReceiver.SetDriveMode(GpioPinDriveMode.InputPullUp);
             irReceiverReader = new GpioChangeReader(irReceiver);
-            //irReceiverReader.Polarity = GpioChangePolarity.Both
+            irReceiverReader.Polarity = GpioChangePolarity.Both;
 
             irLED = gpio.OpenPin(IR_LED_PIN); 
             irLED.Write(GpioPinValue.Low);

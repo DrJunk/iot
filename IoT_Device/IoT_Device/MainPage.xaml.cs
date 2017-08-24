@@ -23,25 +23,23 @@ namespace IoT_Device
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        AzureIoTHub hub;
+        IoTHubDevice hub;
         IRControl irc;
-        IRMessage recorded;
+        IRMessage recordedByButton;
+
+        string buttonString = "Message";
 
         public MainPage()
         {
             this.InitializeComponent();
 
             irc = new IRControl();
-            hub = new AzureIoTHub();
+            hub = new IoTHubDevice();
             Unloaded += MainPage_Unloaded;
 
-
-
-            /* this code gave me cancer
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));
-            */
-
+            
         }
 
         /* this is how we boogie
@@ -53,15 +51,31 @@ namespace IoT_Device
 
         public void HandleMessage(string message)
         {
-            messageButton.Content = message;
-            /*
-            Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
-            task.ContinueWith(x => HandleMsg(x.Result));*/
+            buttonString = message;
+            IRMessage irMsg;
+            Task<string> task;
+            if (message.StartsWith("transmit:"))
+            {
+                irMsg = new IRMessage(message.Substring(9));
+                irc.Transmit(irMsg);
+            }
+            else if (message.StartsWith("startRecording"))
+            {
+                irc.StartRecording();
+            }
+            else if (message.StartsWith("endRecording"))
+            {
+                irMsg = irc.EndRecording();
+                hub.SendDeviceToCloudMessageAsync("irMSG" + irMsg.Encode());
+            }
+            task = hub.ReceiveCloudToDeviceMessageAsync();
+            task.ContinueWith(x => HandleMessage(x.Result));
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Task t = hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + messageButton.Content.ToString());
+            messageButton.Content = buttonString;
+            hub.SendDeviceToCloudMessageAsync("I am Laplace, and I got " + messageButton.Content.ToString());
         }
 
         private void Button_Record(object sender, RoutedEventArgs e)
@@ -75,15 +89,26 @@ namespace IoT_Device
             {
                 IRMessage msg = irc.EndRecording();
                 recordButton.Content = "Start Recording";
-                mainText.Text = msg.ToString() + "\n";
-                mainText.Text += msg.ParseToBits() + "\n" + msg.ParseToRemoteButton() + "\n";
-                recorded = msg;
+                if (msg != null)
+                {
+                    mainText.Text = msg.ToString() + "\n";
+                    mainText.Text += msg.ParseToBits() + "\n" + msg.ParseToRemoteButton() + "\n";
+                }
+
+                else
+                    mainText.Text = "Nothing was recorded.";
+                recordedByButton = msg;
             }
         }
 
         private void Button_Transmit(object sender, RoutedEventArgs e)
         {
-            irc.Transmit(recorded);
+            /*
+            if(recorded != null)
+                irc.Transmit(recorded);
+                */
+            IRMessage newMessage = new IRMessage(new List<double>(new double[] { 10, 20, 10, 20, 20 }), true);
+            irc.Transmit(newMessage);
         }
 
         private void MainPage_Unloaded(object sender, object args)
