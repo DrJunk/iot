@@ -13,32 +13,35 @@ namespace IoT_Device
 {
     class IRControl
     {
-        string debugString;
+        static string debugString;
 
-        private const int IR_LED_PIN = 4;
-        private const int IR_RCV_PIN = 18;
+        const int IR_LED_PIN = 4;
+        const int IR_RCV_PIN = 18;
 
-        private GpioController gpio;
-        private GpioPin irLED;
-        private GpioPin irReceiver;
-        private GpioChangeReader irReceiverReader;
+        static GpioController gpio;
+        static GpioPin irLED;
+        static GpioPin irReceiver;
+        static GpioChangeReader irReceiverReader;
 
-        private Stopwatch stopwatch;
+        static Stopwatch stopwatch;
 
-        public IRControl()
+        private static void createIRControl()
         {
-            debugString = "";
-            stopwatch = new Stopwatch();
-            InitGPIO();
+            if (stopwatch == null)
+            {
+                debugString = "";
+                stopwatch = new Stopwatch();
+                InitGPIO();
+            }
         }
 
-        public void Close()
+        public static void Close()
         {
             irLED.Dispose();
             irReceiver.Dispose();
         }
 
-        private void InitGPIO()
+        private static void InitGPIO()
         {
             gpio = GpioController.GetDefault();
 
@@ -58,13 +61,11 @@ namespace IoT_Device
             irLED.Write(GpioPinValue.Low);
             irLED.SetDriveMode(GpioPinDriveMode.Output);
 
-            //irReceiver.ValueChanged += OnChange;
-
             debugString = "GPIO pin initialized correctly.\n";
-            //flipsAmount = 0;
         }
 
-        public void Transmit(IRMessage message) {
+        public static void Transmit(IRMessage message) {
+            createIRControl();
             stopwatch.Start();
             bool flag = message.startingState;
             foreach (double d in message.intervalList)
@@ -80,6 +81,7 @@ namespace IoT_Device
 
         public void StartRecording()
         {
+            createIRControl();
             irReceiverReader.Start();
         }
 
@@ -87,6 +89,7 @@ namespace IoT_Device
             double newTime, oldTime;
             List<double> intervalList = new List<double>();
             GpioChangeRecord changeRecord;
+            createIRControl();
 
             irReceiverReader.Stop();
             if (irReceiverReader.IsEmpty)
@@ -110,6 +113,7 @@ namespace IoT_Device
 
         private void Send0(double length)
         {
+            createIRControl();
             irLED.Write(GpioPinValue.Low);
             double last = 0, current;
             last = stopwatch.Elapsed.TotalMilliseconds;
@@ -122,6 +126,7 @@ namespace IoT_Device
 
         private void Send1(double length)
         {
+            createIRControl();
             irLED.Write(GpioPinValue.High);
             double last = 0, current;
             last = stopwatch.Elapsed.TotalMilliseconds;
@@ -132,25 +137,5 @@ namespace IoT_Device
             }
             irLED.Write(GpioPinValue.Low);
         }
-            /*
-            double last = 0, current;
-            double start = stopwatch.Elapsed.TotalMilliseconds;
-            last = stopwatch.Elapsed.TotalMilliseconds;
-            for (int i = 0; stopwatch.Elapsed.TotalMilliseconds - start < length; i++)
-            {
-                current = stopwatch.Elapsed.TotalMilliseconds;
-                // Should be: 0.0131 for 38kHz.  But there is overhead so we acctualy measure a littel bit less
-                while (current - last < 0.0085)
-                {
-                    current = stopwatch.Elapsed.TotalMilliseconds;
-                }
-                if (i % 2 == 0)
-                    irLED.Write(GpioPinValue.High);
-                else
-                    irLED.Write(GpioPinValue.Low);
-
-                last = stopwatch.Elapsed.TotalMilliseconds;
-            }
-        }*/
     }
 }

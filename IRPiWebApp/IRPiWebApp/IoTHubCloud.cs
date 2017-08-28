@@ -3,71 +3,37 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices;
 using Microsoft.ServiceBus.Messaging;
+using System.Collections.Generic;
 
 namespace IRPiWebApp
 {
     class IoTHubCloud
     {
-        string connectionString;
-        string iotHubD2cEndpoint;
-        ServiceClient serviceClient;
-        EventHubClient eventHubClient;
+		static ServiceClient serviceClient;
+        static string deviceID = "MainDevice";
+		const string connectionString = "HostName=MainIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=f4RkS/lSdFcJcSIoRqaKKKgWnGhlYOe5GSHORqLIZxA=";
 
-        public IoTHubCloud()
-        {
-            connectionString = "HostName=MainIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=f4RkS/lSdFcJcSIoRqaKKKgWnGhlYOe5GSHORqLIZxA=";
-            iotHubD2cEndpoint = "messages/events";
-
-            // for sending messages, connect to iot hub
-            serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
-
-            // for receiving messages
-            //eventHubClient = EventHubClient.CreateFromConnectionString(connectionString, iotHubD2cEndpoint);
-
-        }
-
-        public async Task ListenForMessagesFromDeviceAsync()
-        {
-            string[] d2cPartitions;
-            d2cPartitions = eventHubClient.GetRuntimeInformation().PartitionIds;
-
-            foreach (string partition in d2cPartitions)
+        private static void createService() {
+            if (serviceClient == null)
             {
-                var receiver = eventHubClient.GetDefaultConsumerGroup().
-                    CreateReceiver(partition, DateTime.Now);
-                ReceiveMessagesFromDeviceAsync(receiver);
-            }
+                serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
+            }	
         }
 
-        async Task ReceiveMessagesFromDeviceAsync(EventHubReceiver receiver)
-        {
-            while (true)
-            {
-                EventData eventData = await receiver.ReceiveAsync();
-                if (eventData == null) continue;
+		public static async Task InvokeMethod(string methodName)
+		{
+            createService();
+            var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(30) };
+			
+            // temp
+            IRMessage msg = new IRMessage(new List<double>(new double[] { 1000, 2000, 1000, 2000, 3000 }), true);
 
-                string data = Encoding.UTF8.GetString(eventData.GetBytes());
-                HandleData(data);
-            }
-        }
+			methodInvocation.SetPayloadJson("'" + msg.Encode() + "'");
 
-        public async Task SendCloudToDeviceMessageAsync(string message)
-        {
-            var commandMessage = new Message(Encoding.ASCII.GetBytes(message));
-            await serviceClient.SendAsync("MainDevice", commandMessage);
-        }
+			var response = await serviceClient.InvokeDeviceMethodAsync(deviceID, methodInvocation);
 
-        public void HandleData(string data)
-        {
-            if (data.StartsWith("irMSG:"))
-            {
-                IRMessage msg = new IRMessage(data.Substring("irMsg:".Length));
-                Console.WriteLine("Recording received: '{0}'", msg.ToString());
-            }
-            else
-            {
-                Console.WriteLine("Message received: '{0}'", data);
-            }
-        }
-    }
+			Console.WriteLine("Response status: {0}, payload:", response.Status);
+			Console.WriteLine(response.GetPayloadAsJson());
+		}
+	}
 }

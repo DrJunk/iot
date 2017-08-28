@@ -9,23 +9,12 @@ using Microsoft.Azure.Devices.Shared;
 
 class IoTHubDevice
 {
-    //
-    // Note: this connection string is specific to the device "ourDeviceID". To configure other devices,
-    // see information on iothub-explorer at http://aka.ms/iothubgetstartedVSCS
-    //
+    /*
     const string deviceConnectionString = "HostName=MainIoTHub.azure-devices.net;DeviceId=MainDevice;SharedAccessKey=c76PJgKGJQ4fkWJxrvexsHQUs08IxR3ufSaWs/dBMDw=";
     string iotHubUri; 
     string deviceId;
     string deviceKey;
     DeviceClient deviceClient;
-
-    //
-    // To monitor messages sent to device "ourDeviceID" use iothub-explorer as follows:
-    //    iothub-explorer monitor-events --login HostName=NumberAdder.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=zD23fJNix+kLl2+SEJFvWBb/UQliKuxvslZYCByx6nA= "ourDeviceID"
-    //
-
-    // Refer to http://aka.ms/azure-iot-hub-vs-cs-wiki for more information on Connected Service for Azure IoT Hub
-
 
     public IoTHubDevice()
     {
@@ -45,6 +34,8 @@ class IoTHubDevice
         await deviceClient.SendEventAsync(msg);
     }
 
+
+	/*
     public async Task<string> ReceiveCloudToDeviceMessageAsync()
     {
         //var deviceClient = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
@@ -62,6 +53,29 @@ class IoTHubDevice
 
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
+    }*/
+
+	static string deviceConnectionString = "HostName=MainIoTHub.azure-devices.net;DeviceId=MainDevice;SharedAccessKey=c76PJgKGJQ4fkWJxrvexsHQUs08IxR3ufSaWs/dBMDw=";
+	static DeviceClient Client = null;
+
+    private static void createClient() {
+		Client = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
+
+		// setup callback for "writeLine" method
+		Client.SetMethodHandlerAsync("writeLine", WriteLineToConsole, null);
+		}
     }
 
+	public static Task<MethodResponse> WriteLineToConsole(MethodRequest methodRequest, object userContext)
+	{
+		buttonString += "\n" + methodRequest.DataAsJson + "\n Returning response for method " + methodRequest.Name;
+		string result = "'Input was written to log.'";
+		recordedByButton = new IRMessage(methodRequest.DataAsJson.Substring(1, methodRequest.DataAsJson.Length - 2));
+		return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(result), 200));
+	}
+
+    public static deleteClient() {
+		Client.SetMethodHandlerAsync("writeLine", null, null).Wait();
+		Client.CloseAsync().Wait();
+    }
 }

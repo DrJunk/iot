@@ -27,47 +27,20 @@ namespace IoT_Device
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        IoTHubDevice hub;
-        IRControl irc;
         static IRMessage recordedByButton;
-
         static string buttonString = "Message";
-        static string deviceConnectionString = "HostName=MainIoTHub.azure-devices.net;DeviceId=MainDevice;SharedAccessKey=c76PJgKGJQ4fkWJxrvexsHQUs08IxR3ufSaWs/dBMDw=";
-        static DeviceClient Client = null;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            irc = new IRControl();
-            //hub = new IoTHubDevice();
             Unloaded += MainPage_Unloaded;
-            //Console.WriteLine("WTF");
 
             /*
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));
             */
-            try
-            {
-                //Console.WriteLine("Connecting to hub");
-                Client = DeviceClient.CreateFromConnectionString(deviceConnectionString, TransportType.Mqtt);
 
-                // setup callback for "writeLine" method
-                Client.SetMethodHandlerAsync("writeLine", WriteLineToConsole, null);
-                //Console.WriteLine("Waiting for direct method call\n Press enter to exit.");
-
-                /*
-                // as a good practice, remove the "writeLine" handler
-                Client.SetMethodHandlerAsync("writeLine", null, null).Wait();
-                Client.CloseAsync().Wait();
-                */
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Error in sample: {0}", ex.Message);
-            }
         }
 
         /* this is how we boogie (wait)
@@ -77,15 +50,7 @@ namespace IoT_Device
             MessageButton.Content = "wuuttt";
         }*/
 
-
-        static Task<MethodResponse> WriteLineToConsole(MethodRequest methodRequest, object userContext)
-        {
-            buttonString += "\n" + methodRequest.DataAsJson + "\n Returning response for method " + methodRequest.Name;
-            string result = "'Input was written to log.'";
-            recordedByButton= new IRMessage(methodRequest.DataAsJson.Substring(1, methodRequest.DataAsJson.Length-2));
-            return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(result), 200));
-        }
-
+        /*
         public void HandleMessage(string message)
         {
             buttonString = message;
@@ -113,7 +78,7 @@ namespace IoT_Device
             }
             task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));
-        }
+        }*/
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -125,7 +90,7 @@ namespace IoT_Device
         {
             if (recordButton.Content.ToString().Equals("Start Recording"))
             {
-                irc.StartRecording();
+                IRControl.StartRecording();
                 recordButton.Content = "Stop Recording";
             }
             else
@@ -147,7 +112,7 @@ namespace IoT_Device
         private void Button_Transmit(object sender, RoutedEventArgs e)
         {
             if(recordedByButton != null)
-                irc.Transmit(recordedByButton);
+                IRControl.Transmit(recordedByButton);
             
             //IRMessage newMessage = new IRMessage(new List<double>(new double[] { 1, 0.5, 1, 0.7, 1.3 }), true);
            // irc.Transmit(newMessage);
@@ -155,7 +120,8 @@ namespace IoT_Device
 
         private void MainPage_Unloaded(object sender, object args)
         {
-            irc.Close();
+            IRControl.Close();
+            IoTHubDevice.deleteClient();
         }
     }
 }
