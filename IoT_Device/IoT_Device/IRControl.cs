@@ -122,6 +122,17 @@ namespace IoT_Device
 
         private void Send1(double length)
         {
+            irLED.Write(GpioPinValue.High);
+            double last = 0, current;
+            last = stopwatch.Elapsed.TotalMilliseconds;
+            current = stopwatch.Elapsed.TotalMilliseconds;
+            while (current - last < length)
+            {
+                current = stopwatch.Elapsed.TotalMilliseconds;
+            }
+            irLED.Write(GpioPinValue.Low);
+        }
+            /*
             double last = 0, current;
             double start = stopwatch.Elapsed.TotalMilliseconds;
             last = stopwatch.Elapsed.TotalMilliseconds;
@@ -140,6 +151,6 @@ namespace IoT_Device
 
                 last = stopwatch.Elapsed.TotalMilliseconds;
             }
-        }
+        }*/
     }
 }

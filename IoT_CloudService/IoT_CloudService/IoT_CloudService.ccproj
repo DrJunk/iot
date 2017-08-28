@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>2.9</ProductVersion>
-    <ProjectGuid>3be7a8fe-48a1-4b51-98cf-e1e7d2d5d2db</ProjectGuid>
+    <ProjectGuid>249da62f-d4bc-4ad3-8985-3e7c6b8280ca</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>IoT_CloudService</RootNamespace>
@@ -35,6 +35,32 @@
     <ServiceDefinition Include="ServiceDefinition.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IRPiWeb\IRPiWeb.csproj">
+      <Name>IRPiWeb</Name>
+      <Project>{e647d256-1321-4626-8882-e38e90b58664}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>IRPiWeb</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\IRPiWorker\IRPiWorker.csproj">
+      <Name>IRPiWorker</Name>
+      <Project>{9487ac7d-5702-40b9-8145-5d6efe0781fd}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>IRPiWorker</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IRPiWebContent\" />
+    <Folder Include="IRPiWorkerContent\" />
+  </ItemGroup>
+  <ItemGroup>
+    <DiagnosticsConfiguration Include="IRPiWebContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="IRPiWorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

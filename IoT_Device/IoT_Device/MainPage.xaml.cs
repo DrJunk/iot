@@ -36,10 +36,10 @@ namespace IoT_Device
             irc = new IRControl();
             hub = new IoTHubDevice();
             Unloaded += MainPage_Unloaded;
-
+            /*
             Task<string> task = hub.ReceiveCloudToDeviceMessageAsync();
             task.ContinueWith(x => HandleMessage(x.Result));
-
+            */
         }
 
         /* this is how we boogie (wait)
@@ -109,12 +109,11 @@ namespace IoT_Device
 
         private void Button_Transmit(object sender, RoutedEventArgs e)
         {
-            /*
-            if(recorded != null)
-                irc.Transmit(recorded);
-                */
-            IRMessage newMessage = new IRMessage(new List<double>(new double[] { 10, 20, 10, 20, 20 }), true);
-            irc.Transmit(newMessage);
+            if(recordedByButton != null)
+                irc.Transmit(recordedByButton);
+            
+            //IRMessage newMessage = new IRMessage(new List<double>(new double[] { 1, 0.5, 1, 0.7, 1.3 }), true);
+           // irc.Transmit(newMessage);
         }
 
         private void MainPage_Unloaded(object sender, object args)
