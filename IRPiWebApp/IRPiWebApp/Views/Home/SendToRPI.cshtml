@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "SendToRPI Page";
 }
 
 <script>
@@ -20,7 +20,7 @@
 
 <div class="jumbotron">
     <h1>ASP.NET AZURE PORTAWL</h1>
-    <p class="lead">Yissssssssssssssssssssssss dawg</p>
+    <p class="lead">Yisssssssssssssssssssssss</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
@@ -32,7 +32,16 @@
             enables a clean separation of concerns and gives you full control over markup
             for enjoyable, agile development.
         </p>
-        <input type="button" class="my-button" value="Send message" name="back" onclick="@("location.href='"+ Url.Action("SendToRPI", "Home")+ "'")" />
+        <p><a class="btn btn-default" href="">Send? &raquo;</a></p>
+        <input type="button" class="my-button" value="Send message" name="back"
+               onclick="@("location.href='"+ Url.Action("SendToRPI", "Home")+ "'")" />
+        @Ajax.ActionLink("Send Email", // <-- Text to display
+     "SendEmail", // <-- Action Method Name
+     new AjaxOptions
+     {
+         UpdateTargetId = "", // <-- Used if you want to update up, DOM element ID to update
+         HttpMethod = "GET" // <-- HTTP method
+     })
     </div>
     <div class="col-md-4">
         <h2>Get more libraries</h2>

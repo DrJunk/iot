@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
+using Microsoft.Azure.Devices.Shared;
 
 
 class IoTHubDevice
@@ -62,4 +63,5 @@ class IoTHubDevice
             await Task.Delay(TimeSpan.FromSeconds(1));
         }
     }
+
 }
