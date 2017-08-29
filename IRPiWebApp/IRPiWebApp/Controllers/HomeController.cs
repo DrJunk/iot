@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IRPiWebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : System.Web.Mvc.Controller
     {
         public ActionResult Index()
         {
@@ -26,15 +26,6 @@ namespace IRPiWebApp.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
-        public ActionResult SendToRPI()
-        {
-            ViewBag.Message = "Sent message.";
-
-            IoTHubCloud.InvokeMethod("writeLine");
 
             return View();
         }

@@ -10,30 +10,44 @@ namespace IRPiWebApp
     class IoTHubCloud
     {
 		static ServiceClient serviceClient;
-        static string deviceID = "MainDevice";
 		const string connectionString = "HostName=MainIoTHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=f4RkS/lSdFcJcSIoRqaKKKgWnGhlYOe5GSHORqLIZxA=";
 
-        private static void createService() {
+        private static void CreateService() {
             if (serviceClient == null)
             {
                 serviceClient = ServiceClient.CreateFromConnectionString(connectionString);
             }	
         }
 
-		public static async Task InvokeMethod(string methodName)
+		public static async Task InvokeTransmit(string deviceID, string irMessageCode)
 		{
-            createService();
-            var methodInvocation = new CloudToDeviceMethod(methodName) { ResponseTimeout = TimeSpan.FromSeconds(30) };
-			
-            // temp
-            IRMessage msg = new IRMessage(new List<double>(new double[] { 1000, 2000, 1000, 2000, 3000 }), true);
+            CreateService();
+            var methodInvocation = new CloudToDeviceMethod("Transmit") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+			methodInvocation.SetPayloadJson("'" + irMessageCode + "'");
 
-			methodInvocation.SetPayloadJson("'" + msg.Encode() + "'");
+            try
+            {
+                var response = await serviceClient.InvokeDeviceMethodAsync(deviceID, methodInvocation);
+            }
+            catch(Exception e)
+            {
 
-			var response = await serviceClient.InvokeDeviceMethodAsync(deviceID, methodInvocation);
-
-			Console.WriteLine("Response status: {0}, payload:", response.Status);
-			Console.WriteLine(response.GetPayloadAsJson());
+            }
 		}
-	}
+
+        public static async Task InvokeStartRecording(string deviceID)
+        {
+            CreateService();
+            var methodInvocation = new CloudToDeviceMethod("StartRecording") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+            var response = await serviceClient.InvokeDeviceMethodAsync(deviceID, methodInvocation);
+        }
+
+        public static async Task InvokeEndRecording(string deviceID, string productName, string actionName)
+        {
+            CreateService();
+            var methodInvocation = new CloudToDeviceMethod("EndRecording") { ResponseTimeout = TimeSpan.FromSeconds(30) };
+            methodInvocation.SetPayloadJson("'" + productName + ";" + actionName + "'");
+            var response = await serviceClient.InvokeDeviceMethodAsync(deviceID, methodInvocation);
+        }
+    }
 }

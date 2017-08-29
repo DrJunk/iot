@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Windows.Devices.Pwm;
-using Windows.Devices;
 using Windows.Devices.Gpio;
 using System.Diagnostics;
 
@@ -25,14 +19,11 @@ namespace IoT_Device
 
         static Stopwatch stopwatch;
 
-        private static void createIRControl()
+        public static void Init()
         {
-            if (stopwatch == null)
-            {
-                debugString = "";
-                stopwatch = new Stopwatch();
-                InitGPIO();
-            }
+            debugString = "";
+            stopwatch = new Stopwatch();
+            InitGPIO();
         }
 
         public static void Close()
@@ -65,9 +56,8 @@ namespace IoT_Device
         }
 
         public static void Transmit(IRMessage message) {
-            createIRControl();
             stopwatch.Start();
-            bool flag = message.startingState;
+            bool flag = true;
             foreach (double d in message.intervalList)
             {
                 if (flag)
@@ -79,17 +69,16 @@ namespace IoT_Device
             stopwatch.Stop();
         }
 
-        public void StartRecording()
+        public static void StartRecording()
         {
-            createIRControl();
             irReceiverReader.Start();
         }
 
-        public IRMessage EndRecording() {
+        public static IRMessage EndRecording() {
             double newTime, oldTime;
             List<double> intervalList = new List<double>();
             GpioChangeRecord changeRecord;
-            createIRControl();
+            Init();
 
             irReceiverReader.Stop();
             if (irReceiverReader.IsEmpty)
@@ -108,12 +97,11 @@ namespace IoT_Device
 
             if (!intervalList.Any())
                 return null;
-            return new IRMessage(intervalList, true);
+            return new IRMessage(intervalList);
         }
 
-        private void Send0(double length)
+        private static void Send0(double length)
         {
-            createIRControl();
             irLED.Write(GpioPinValue.Low);
             double last = 0, current;
             last = stopwatch.Elapsed.TotalMilliseconds;
@@ -124,9 +112,8 @@ namespace IoT_Device
             }
         }
 
-        private void Send1(double length)
+        private static void Send1(double length)
         {
-            createIRControl();
             irLED.Write(GpioPinValue.High);
             double last = 0, current;
             last = stopwatch.Elapsed.TotalMilliseconds;

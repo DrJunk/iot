@@ -11,7 +11,7 @@ using IRPiWebApp.Models;
 namespace IRPiWebApp.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : System.Web.Mvc.Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;

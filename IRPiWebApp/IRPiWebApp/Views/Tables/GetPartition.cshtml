@@ -1,0 +1,24 @@
+﻿@model IEnumerable<IRPiWebApp.Models.IREntity>
+@{
+    ViewBag.Title = "GetPartition";
+}
+
+<h2>Get Partition results</h2>
+
+<table border="1">
+    <tr>
+        <th>DeviceID</th>
+        <th>Product name</th>
+        <th>Action name</th>
+        <th></th>
+    </tr>
+    @foreach (var irEntity in Model)
+    {
+        <tr>
+            <td>@(irEntity.PartitionKey)</td>
+            <td>@(irEntity.RowKey.Split(';')[0])</td>
+            <td>@(irEntity.RowKey.Split(';')[1])</td>
+            <td>@Html.ActionLink("Transmit message", "Transmit", "RPi", new { irMessageCode= irEntity.IRMessageCode}, null)</td>
+        </tr>
+    }
+</table>
