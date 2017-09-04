@@ -11,6 +11,7 @@
         <th>Product name</th>
         <th>Action name</th>
         <th></th>
+        <th></th>
     </tr>
     @foreach (var irEntity in Model)
     {
@@ -18,7 +19,8 @@
             <td>@(irEntity.PartitionKey)</td>
             <td>@(irEntity.RowKey.Split(';')[0])</td>
             <td>@(irEntity.RowKey.Split(';')[1])</td>
-            <td>@Html.ActionLink("Transmit message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
+            <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
+            <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
         </tr>
     }
 </table>

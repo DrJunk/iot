@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -26,6 +27,39 @@ namespace IRPiWebApp.Controllers
         {
             UserManager = userManager;
             SignInManager = signInManager;
+        }
+
+        [AllowAnonymous]
+        public ActionResult LoginLocal()
+        {
+            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"))) // If local
+            {
+                var claims = new List<Claim> {
+                                        new Claim(ClaimTypes.Name, "LocalDev"),
+                                        new Claim(ClaimTypes.NameIdentifier, "LocalDev"),
+                                        new Claim(ClaimTypes.Email, "LocalDev@local.com"),
+                                        new Claim(ClaimTypes.Surname, "Developer"),
+                                        new Claim(ClaimTypes.GivenName, "LocalDev"),
+                                        new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity")
+                                    };
+
+                var owinContext = HttpContext.GetOwinContext();
+                var authmanager = owinContext.Authentication;
+                var claimsIdentity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+                authmanager.SignIn(new AuthenticationProperties { IsPersistent = false, AllowRefresh = true }, claimsIdentity);
+            }
+            return Redirect("/");
+        }
+        
+        public ActionResult LogoutLocal()
+        {
+            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"))) // If local
+            {
+                var owinContext = HttpContext.GetOwinContext();
+                var authmanager = owinContext.Authentication;
+                authmanager.SignOut(new string[] { });
+            }
+            return Redirect("/");
         }
 
         public ApplicationSignInManager SignInManager

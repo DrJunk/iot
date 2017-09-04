@@ -14,11 +14,13 @@ namespace IRPiWebApp.Controllers
     public class TablesController : Controller
     {
         // GET: Tables
+        [Authorize]
         public ActionResult Index()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult CreateTable()
         {
             // The code in this section goes here.
@@ -36,6 +38,7 @@ namespace IRPiWebApp.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult GetPartition()
         {
             // The code in this section goes here.
