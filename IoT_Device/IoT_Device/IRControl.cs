@@ -18,6 +18,7 @@ namespace IoT_Device
         static GpioPin irLED;
         static GpioPin irReceiver;
         static GpioPin statusLED;
+        public static GpioPin button;
         static GpioChangeReader irReceiverReader;
 
         static Stopwatch stopwatch;
@@ -59,7 +60,15 @@ namespace IoT_Device
             statusLED.Write(GpioPinValue.Low);
             statusLED.SetDriveMode(GpioPinDriveMode.Output);
 
+            button = gpio.OpenPin(BTN_PIN);
+            button.SetDriveMode(GpioPinDriveMode.Input);
+
             debugString = "GPIO pin initialized correctly.\n";
+        }
+
+        public static void AddButtonListener(Windows.Foundation.TypedEventHandler<GpioPin, GpioPinValueChangedEventArgs> listener)
+        {
+            button.ValueChanged += listener;
         }
 
         public static void Transmit(IRMessage message) {

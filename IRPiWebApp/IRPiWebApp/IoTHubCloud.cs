@@ -22,6 +22,7 @@ namespace IRPiWebApp
 		public static async Task InvokeTransmit(string deviceID, string irMessageCode)
 		{
             CreateService();
+
             var methodInvocation = new CloudToDeviceMethod("Transmit") { ResponseTimeout = TimeSpan.FromSeconds(30) };
 			methodInvocation.SetPayloadJson("'" + irMessageCode + "'");
 

@@ -1,5 +1,9 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.Devices.Gpio;
+using Microsoft.Azure.Devices.Client;
+using System.Text;
+using System;
 
 namespace IoT_Device
 {
@@ -13,6 +17,8 @@ namespace IoT_Device
             this.InitializeComponent();
             IRControl.Init();
             AzureIoTHub.RegisterDirectMethodsAsync();
+
+            IRControl.AddButtonListener(OnButtonValueChanged);
 
             Unloaded += MainPage_Unloaded;
 
@@ -63,6 +69,29 @@ namespace IoT_Device
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             messageButton.Content = debugString;
+        }
+
+        public void OnButtonValueChanged(GpioPin sender, GpioPinValueChangedEventArgs args)
+        {
+            if (args.Edge == GpioPinEdge.RisingEdge) // Button is opposite to intuition, so that if checks 'if just pressed'
+            {
+                IRControl.StartRecording();
+            }
+            else
+            {
+                IRMessage msg = IRControl.EndRecording();
+                string debugString;
+                if (msg != null)
+                {
+                    debugString = msg.ToString() + "\n";
+                    debugString += msg.ParseToBits() + "\n";
+                    AzureIoTHub.SendDeviceToCloudMessageAsync("\"ProductName;Action" + DateTimeOffset.Now.ToUnixTimeMilliseconds() + "\"" + ";" + msg.Encode()).Wait();
+                }
+                else
+                    debugString = "Nothing was recorded.";
+
+                Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { mainText.Text = debugString; });
+            }
         }
 
         private void Button_Record(object sender, RoutedEventArgs e)

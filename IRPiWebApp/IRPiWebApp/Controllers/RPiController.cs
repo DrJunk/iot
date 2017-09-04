@@ -8,9 +8,6 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using IRPiWebApp.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.ServiceRuntime;
 
 
 namespace IRPiWebApp.Controllers
@@ -56,6 +53,7 @@ namespace IRPiWebApp.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("IRRecordingTable");
             TableOperation retrieveOperation = TableOperation.Retrieve<IREntity>(irPartitionKey, irRowKey);
+            
             TableResult result = table.Execute(retrieveOperation);
             string irMessageCode = ((IREntity)result.Result).IRMessageCode;
 
