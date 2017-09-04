@@ -19,7 +19,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44381</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -294,6 +294,7 @@
     <Compile Include="Models\CustomerEntity.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IREntity.cs" />
+    <Compile Include="Models\IRRecordModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -365,6 +366,9 @@
     <Content Include="Views\Tables\AddEntity.cshtml" />
     <Content Include="Views\Tables\GetPartition.cshtml" />
     <Content Include="Views\RPi\Transmit.cshtml" />
+    <Content Include="Views\RPi\NowRecording.cshtml" />
+    <Content Include="Views\RPi\EndRecording.cshtml" />
+    <Content Include="Views\RPi\CreateRecording.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

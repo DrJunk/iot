@@ -1,0 +1,16 @@
+﻿@model IRPiWebApp.Models.IRRecordModel
+
+@{
+    ViewBag.Title = "Create recording";
+}
+
+<h2>Create recording</h2>
+
+@using (Html.BeginForm("StartRecording", "RPi", FormMethod.Post))
+{
+    @Html.TextBoxFor(model => model.ProductName)
+    @Html.ValidationMessageFor(model => model.ProductName)
+    @Html.TextBoxFor(model => model.ActionName)
+    @Html.ValidationMessageFor(model => model.ActionName)
+    <button type="submit">Start</button>
+}

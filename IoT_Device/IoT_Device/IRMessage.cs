@@ -18,7 +18,7 @@ public class IRMessage
         {
             Console.WriteLine(element);
             if (element.Length != 0)
-                this.intervalList.Add(Convert.ToInt64(element));
+                this.intervalList.Add(Convert.ToDouble(element));
         }
     }
 

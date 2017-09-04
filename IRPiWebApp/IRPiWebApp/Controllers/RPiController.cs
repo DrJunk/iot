@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -13,26 +14,44 @@ namespace IRPiWebApp.Controllers
 {
     public class RPiController : Controller
     {
-        // GET: RPi
-        public ActionResult Index()
+        public ActionResult CreateRecording()
         {
             return View();
         }
 
-        public ActionResult StartRecording()
+        [HttpPost]
+        public ActionResult StartRecording(IRRecordModel model)
         {
+            if (ModelState.IsValid)
+            {
+                IoTHubCloud.InvokeStartRecording("MainDevice");
+
+                ViewBag.ProductName = model.ProductName;
+                ViewBag.ActionName = model.ActionName;
+
+                return View("NowRecording");
+            }
+
+            return View("CreateRecording", model);
+        }
+
+        public ActionResult EndRecording(string productName, string actionName)
+        {
+            IoTHubCloud.InvokeEndRecording("MainDevice", productName, actionName);
 
             return View();
         }
 
-        public ActionResult EndRecording()
+        public ActionResult Transmit(string irPartitionKey, string irRowKey)
         {
-            return View();
-        }
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("IRRecordingTable");
+            TableOperation retrieveOperation = TableOperation.Retrieve<IREntity>(irPartitionKey, irRowKey);
+            TableResult result = table.Execute(retrieveOperation);
+            string irMessageCode = ((IREntity)result.Result).IRMessageCode;
 
-        public ActionResult Transmit(string irMessageCode)
-        {
-            irMessageCode = irMessageCode.Substring(6, irMessageCode.Length - 10); // Parse from JSON object
             IoTHubCloud.InvokeTransmit("MainDevice", irMessageCode);
             ViewBag.Result = true;
             return View();

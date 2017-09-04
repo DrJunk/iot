@@ -10,11 +10,14 @@ namespace IoT_Device
         static string debugString;
 
         const int IR_LED_PIN = 4;
-        const int IR_RCV_PIN = 18;
+        const int IR_RCV_PIN = 26;
+        const int STATUS_LED_PIN = 17;
+        const int BTN_PIN = 22;
 
         static GpioController gpio;
         static GpioPin irLED;
         static GpioPin irReceiver;
+        static GpioPin statusLED;
         static GpioChangeReader irReceiverReader;
 
         static Stopwatch stopwatch;
@@ -52,10 +55,15 @@ namespace IoT_Device
             irLED.Write(GpioPinValue.Low);
             irLED.SetDriveMode(GpioPinDriveMode.Output);
 
+            statusLED = gpio.OpenPin(STATUS_LED_PIN);
+            statusLED.Write(GpioPinValue.Low);
+            statusLED.SetDriveMode(GpioPinDriveMode.Output);
+
             debugString = "GPIO pin initialized correctly.\n";
         }
 
         public static void Transmit(IRMessage message) {
+            statusLED.Write(GpioPinValue.High);
             stopwatch.Start();
             bool flag = true;
             foreach (double d in message.intervalList)
@@ -67,10 +75,12 @@ namespace IoT_Device
                 flag = !flag;
             }
             stopwatch.Stop();
+            statusLED.Write(GpioPinValue.Low);
         }
 
         public static void StartRecording()
         {
+            statusLED.Write(GpioPinValue.High);
             irReceiverReader.Start();
         }
 
@@ -78,9 +88,11 @@ namespace IoT_Device
             double newTime, oldTime;
             List<double> intervalList = new List<double>();
             GpioChangeRecord changeRecord;
-            Init();
+
+            statusLED.Write(GpioPinValue.Low);
 
             irReceiverReader.Stop();
+
             if (irReceiverReader.IsEmpty)
                 return null;
 

@@ -75,10 +75,19 @@ namespace IoT_Device
 
         private static Task<MethodResponse> OnEndRecordingCalled(MethodRequest methodRequest, object userContext)
         {
-            IRMessage msg = IRControl.EndRecording();
-            string result = "'" + msg.Encode() + "'";
-            SendDeviceToCloudMessageAsync(methodRequest.DataAsJson + ";" + msg.Encode());
-            return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(result), 200));
+            try
+            {
+                IRMessage msg = IRControl.EndRecording();
+                if(msg == null)
+                    return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes("'The IR reciver did not receive a message'"), 500));
+                string result = "'" + msg.Encode() + "'";
+                SendDeviceToCloudMessageAsync(methodRequest.DataAsJson + ";" + msg.Encode()).Wait();
+                return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes(result), 200));
+            }
+            catch(Exception e)
+            {
+                return Task.FromResult(new MethodResponse(Encoding.UTF8.GetBytes("'Error in OnEndRecordingCalled:" + e.Message + "'"), 500));
+            }
         }
 
         public static async Task RegisterDirectMethodsAsync()

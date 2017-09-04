@@ -22,11 +22,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Get partition", "GetPartition", "Tables")</li>
+                    <li>@Html.ActionLink("Create recording", "CreateRecording", "RPi")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Create table", "CreateTable", "Tables")</li>
-                    <li>@Html.ActionLink("Add entity", "AddEntity", "Tables")</li>
-                    <li>@Html.ActionLink("Get partition", "GetPartition", "Tables")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

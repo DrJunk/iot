@@ -18,7 +18,7 @@
             <td>@(irEntity.PartitionKey)</td>
             <td>@(irEntity.RowKey.Split(';')[0])</td>
             <td>@(irEntity.RowKey.Split(';')[1])</td>
-            <td>@Html.ActionLink("Transmit message", "Transmit", "RPi", new { irMessageCode= irEntity.IRMessageCode}, null)</td>
+            <td>@Html.ActionLink("Transmit message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
         </tr>
     }
 </table>

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<IRPiWebApp.Models.IREntity>
+
+@{
+    ViewBag.Title = "Create recording";
+}
+
+<h2>Now recording</h2>
+<input value="@(ViewBag.ProductName)" disabled>
+<input value="@(ViewBag.ActionName)" disabled>
+<input type="button" value="End recording" onclick="@("location.href='"+ Url.Action("EndRecording", "RPi", new {ProductName=ViewBag.ProductName, ActionName=ViewBag.ActionName})+ "'")" />
