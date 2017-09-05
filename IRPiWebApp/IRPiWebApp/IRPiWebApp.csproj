@@ -300,6 +300,7 @@
     <Compile Include="Models\IREntity.cs" />
     <Compile Include="Models\IRRecordModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ScheduleEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -379,6 +380,8 @@
     <Content Include="Views\RPi\EndRecording.cshtml" />
     <Content Include="Views\RPi\CreateRecording.cshtml" />
     <Content Include="Views\RPi\Delete.cshtml" />
+    <Content Include="Views\Tables\GetSchedule.cshtml" />
+    <Content Include="Views\Tables\SelectTimeSchedule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

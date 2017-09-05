@@ -8,6 +8,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using IRPiWebApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace IRPiWebApp.Controllers
 {
@@ -65,7 +66,44 @@ namespace IRPiWebApp.Controllers
 
             return View(customers);
         }
+
+        [Authorize]
+        public ActionResult GetSchedule()
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            CloudTable table = tableClient.GetTableReference("IRScheduleTable");
+
+            TableQuery<ScheduleEntity> query =
+                new TableQuery<ScheduleEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, User.Identity.GetUserName()));
+
+            //TableQuery<ScheduleEntity> query = new TableQuery<ScheduleEntity>();
+
+            List<ScheduleEntity> customers = new List<ScheduleEntity>();
+            TableContinuationToken token = null;
+            do
+            {
+                TableQuerySegment<ScheduleEntity> resultSegment = table.ExecuteQuerySegmented(query, token);
+                token = resultSegment.ContinuationToken;
+
+                foreach (ScheduleEntity customer in resultSegment.Results)
+                {
+                    customers.Add(customer);
+                }
+            } while (token != null);
+
+            return View(customers);
+        }
+
+        [Authorize]
+        public ActionResult SetNewSchedule(string deviceID, string productName, string actionName)
+        {
+            ViewBag.scheduleDeviceID = deviceID;
+            ViewBag.scheduleProductName = productName;
+            ViewBag.scheduleActionName = actionName;
+            return View("SelectTimeSchedule");
+        }
     }
-
-
 }

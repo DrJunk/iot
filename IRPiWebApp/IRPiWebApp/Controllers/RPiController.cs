@@ -53,7 +53,7 @@ namespace IRPiWebApp.Controllers
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             CloudTable table = tableClient.GetTableReference("IRRecordingTable");
             TableOperation retrieveOperation = TableOperation.Retrieve<IREntity>(irPartitionKey, irRowKey);
-            
+
             TableResult result = table.Execute(retrieveOperation);
             string irMessageCode = ((IREntity)result.Result).IRMessageCode;
 

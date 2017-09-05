@@ -1,0 +1,32 @@
+﻿@model IEnumerable<IRPiWebApp.Models.ScheduleEntity>
+@{
+    ViewBag.Title = "GetSchedule";
+}
+
+<h2>Schedules</h2>
+
+<table border="1">
+    <tr>
+        <th>Time</th>
+        <th>DeviceID</th>
+        <th>Product name</th>
+        <th>Action name</th>
+    </tr>
+    @foreach (var schedule in Model)
+    {
+        <tr>
+            <td>@DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(schedule.PartitionKey)).ToString()</td>
+            <td>@schedule.DeviceID</td>
+            @if (schedule.ProductName != null)
+            {
+                <td>@schedule.ProductName</td>
+                <td>@schedule.ActionName</td>
+            }
+            else
+            {
+                <td>"Not a spesific action"</td>
+                <td></td>
+            }
+        </tr>
+    }
+</table>
