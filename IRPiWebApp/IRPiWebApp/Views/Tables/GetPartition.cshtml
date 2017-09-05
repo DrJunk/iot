@@ -20,7 +20,7 @@
             <td>@(irEntity.RowKey.Split(';')[0])</td>
             <td>@(irEntity.RowKey.Split(';')[1])</td>
             <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
-            <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
+            <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
         </tr>
     }
 </table>

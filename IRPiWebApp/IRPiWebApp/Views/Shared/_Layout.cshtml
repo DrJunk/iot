@@ -23,13 +23,14 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-@if (Request.IsAuthenticated)
-{
-                    <li>@Html.ActionLink("Get partition", "GetPartition", "Tables")</li>
-                    <li>@Html.ActionLink("Create recording", "CreateRecording", "RPi")</li>
-}
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Get Partition", "GetPartition", "Tables")</li>
+                        <li>@Html.ActionLink("Create Recording", "CreateRecording", "RPi")</li>
+                    }                       
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+                    <!-- <li>@Html.ActionLink("Contact", "Contact", "Home")</li>     -->
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -39,7 +40,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Google</p>
         </footer>
     </div>
 
