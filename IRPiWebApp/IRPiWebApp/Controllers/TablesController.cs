@@ -105,5 +105,36 @@ namespace IRPiWebApp.Controllers
             ViewBag.scheduleActionName = actionName;
             return View("SelectTimeSchedule");
         }
+
+        [Authorize]
+        public ActionResult AddSchedule(DateTime scheduleTime, string deviceID, string productName, string actionName)
+        {
+            DateTimeOffset scheduleTimeOffset = DateTime.SpecifyKind(scheduleTime, DateTimeKind.Utc);
+
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+            CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            //Open recording table and retrive the IREntity
+            CloudTable recordTable = tableClient.GetTableReference("IRRecordingTable");
+            IREntity irEntity = new IREntity("", deviceID, productName, actionName);
+            TableOperation retrieveOperation = TableOperation.Retrieve<IREntity>(irEntity.PartitionKey, irEntity.RowKey);
+            TableResult result = recordTable.Execute(retrieveOperation);
+            irEntity = (IREntity)result.Result;
+            if (irEntity == null)
+            {
+                ViewBag.Result = false;
+                //todo didnt work page
+                return Redirect("/Tables/GetPartition");
+
+            }
+
+            //Open scheduling table and add the schedule
+            CloudTable scheduleTable = tableClient.GetTableReference("IRScheduleTable");
+            TableOperation addOperation = TableOperation.Insert(new ScheduleEntity(irEntity, scheduleTimeOffset, User.Identity.GetUserName()));
+            result = scheduleTable.Execute(addOperation);
+            ViewBag.Result = true;
+            return Redirect("/Tables/GetSchedule");
+        }
     }
 }

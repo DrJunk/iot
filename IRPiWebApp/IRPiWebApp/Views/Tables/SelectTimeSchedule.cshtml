@@ -1,6 +1,15 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "SelectTimeSchedule";
 }
 
 <h2>SelectTimeSchedule</h2>
+
+@using (Html.BeginForm("AddSchedule", "Tables", FormMethod.Post))
+{
+    <input value="@(ViewBag.scheduleDeviceID)" name ="deviceID" readonly="readonly">
+    <input value="@(ViewBag.scheduleProductName)" name ="productName" readonly="readonly">
+    <input value="@(ViewBag.scheduleActionName)" name="actionName" readonly="readonly">
+    <input type="datetime-local" name="scheduleTime" required="required">
+    <button type="submit">Start</button>
+}
+

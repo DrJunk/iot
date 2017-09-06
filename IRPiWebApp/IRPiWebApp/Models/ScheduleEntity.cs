@@ -18,10 +18,10 @@ namespace IRPiWebApp.Models
             this.IRMessageCode = IRMessageCode;
         }
 
-        public ScheduleEntity(IREntity irEntity)
+        public ScheduleEntity(IREntity irEntity, DateTimeOffset datetime, string userName)
         {
-            this.PartitionKey = null;
-            this.RowKey = null;
+            this.PartitionKey = datetime.ToUnixTimeMilliseconds().ToString();
+            this.RowKey = userName + ";" + irEntity.PartitionKey +";" + irEntity.RowKey;
             this.DeviceID = irEntity.PartitionKey;
             this.ProductName = irEntity.RowKey.Split(';')[0];
             this.ActionName = irEntity.RowKey.Split(';')[1];
