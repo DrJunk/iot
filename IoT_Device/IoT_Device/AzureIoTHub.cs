@@ -23,7 +23,7 @@ namespace IoT_Device
         // Note: this connection string is specific to the device "MainDevice". To configure other devices,
         // see information on iothub-explorer at http://aka.ms/iothubgetstartedVSCS
         //
-        const string deviceConnectionString = "HostName=MainIoTHub.azure-devices.net;DeviceId=MainDevice;SharedAccessKey=c76PJgKGJQ4fkWJxrvexsHQUs08IxR3ufSaWs/dBMDw=";
+        const string deviceConnectionString = "HostName=MainIoTHub.azure-devices.net;DeviceId=OtherDevice;SharedAccessKey=lHAeAnaU1vZMzze6DyDlMOaMp+b9CV8xIcVvpEf9Ik0=";
 
         //
         // To monitor messages sent to device "kraaa" use iothub-explorer as follows:

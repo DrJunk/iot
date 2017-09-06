@@ -6,23 +6,61 @@
 
 <h2>Get Partition results</h2>
 
-<table border="1">
-    <tr>
-        <th>DeviceID</th>
-        <th>Product name</th>
-        <th>Action name</th>
-        <th></th>
-        <th></th>
-    </tr>
-    @foreach (var irEntity in Model)
-    {
+@using (Html.BeginForm("EditIRRecording", "Tables", new { oldPartitionKey=ViewBag.EditPartitionKey, oldRowKey=ViewBag.EditRowKey}, FormMethod.Post, null))
+{
+    <table border="1">
         <tr>
-            <td>@(irEntity.PartitionKey)</td>
-            <td>@(irEntity.RowKey.Split(';')[0])</td>
-            <td>@(irEntity.RowKey.Split(';')[1])</td>
-            <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
-            <td>@Html.ActionLink("Schedule", "SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] }, null)</td>
-            <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
+            <th>DeviceID</th>
+            <th>Product name</th>
+            <th>Action name</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
-    }
-</table>
+        @if (!ViewBag.EditMode)
+        {
+            foreach (var irEntity in Model)
+            {
+                <tr>
+                    <td>@(irEntity.PartitionKey)</td>
+                    <td>@(irEntity.RowKey.Split(';')[0])</td>
+                    <td>@(irEntity.RowKey.Split(';')[1])</td>
+                    <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
+                    <td>@Html.ActionLink("Schedule", "SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] }, null)</td>
+                    <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
+                    <td>@Html.ActionLink("Edit", "GetPartition", "Tables", new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey }, null)</td>
+                </tr>
+            }
+        }
+        else
+        {
+            foreach (var irEntity in Model)
+            {
+                if (irEntity.PartitionKey == ViewBag.EditPartitionKey && irEntity.RowKey == ViewBag.EditRowKey)
+                {
+                    <tr>
+                        <td>@(irEntity.PartitionKey)</td>
+                        <td><input type="text" name="newProductName" value="@(irEntity.RowKey.Split(';')[0])" /></td>
+                        <td><input type="text" name="newActionName" value="@(irEntity.RowKey.Split(';')[1])" /></td>
+                        <td></td>
+                        <td></td>
+                        <td><button type="submit">Save</button></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>@(irEntity.PartitionKey)</td>
+                        <td>@(irEntity.RowKey.Split(';')[0])</td>
+                        <td>@(irEntity.RowKey.Split(';')[1])</td>
+                        <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
+                        <td>@Html.ActionLink("Schedule", "SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] }, null)</td>
+                        <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
+                        <td>@Html.ActionLink("Edit", "GetPartition", "Tables", new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey }, null)</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+}

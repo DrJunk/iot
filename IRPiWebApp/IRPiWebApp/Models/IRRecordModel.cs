@@ -12,5 +12,8 @@ namespace IRPiWebApp.Models
 
         [Required]
         public string ActionName { get; set; }
+
+        [Required]
+        public string DeviceID { get; set; }
     }
 }

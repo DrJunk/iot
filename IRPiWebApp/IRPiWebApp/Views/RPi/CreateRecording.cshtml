@@ -8,9 +8,11 @@
 
 @using (Html.BeginForm("StartRecording", "RPi", FormMethod.Post))
 {
+    @Html.DropDownListFor(model => model.DeviceID, new SelectList(ViewBag.Devices))
     @Html.TextBoxFor(model => model.ProductName)
     @Html.ValidationMessageFor(model => model.ProductName)
     @Html.TextBoxFor(model => model.ActionName)
     @Html.ValidationMessageFor(model => model.ActionName)
+
     <button type="submit">Start</button>
 }

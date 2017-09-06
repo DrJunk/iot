@@ -8,7 +8,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Table;
 using IRPiWebApp.Models;
-
+using Microsoft.AspNet.Identity;
 
 namespace IRPiWebApp.Controllers
 {
@@ -17,6 +17,32 @@ namespace IRPiWebApp.Controllers
         [Authorize]
         public ActionResult CreateRecording()
         {
+            // The code in this section goes here.
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+                CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            // Collect user devices
+            CloudTable devicesTable = tableClient.GetTableReference("UserDevicesTable");
+            TableQuery<TableEntity> query =
+                new TableQuery<TableEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, User.Identity.GetUserId())); // change
+
+            List<string> deviceNames = new List<string>();
+            TableContinuationToken token = null;
+            do
+            {
+                TableQuerySegment<TableEntity> resultSegment = devicesTable.ExecuteQuerySegmented(query, token);
+                token = resultSegment.ContinuationToken;
+
+                foreach (TableEntity entity in resultSegment.Results)
+                {
+                    deviceNames.Add(entity.RowKey);
+                }
+            } while (token != null);
+
+            ViewBag.Devices = deviceNames;
+
             return View();
         }
 
@@ -26,22 +52,24 @@ namespace IRPiWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                IoTHubCloud.InvokeStartRecording("MainDevice");
+                IoTHubCloud.InvokeStartRecording(model.DeviceID);
 
                 ViewBag.ProductName = model.ProductName;
                 ViewBag.ActionName = model.ActionName;
+                ViewBag.DeviceID = model.DeviceID;
 
                 return View("NowRecording");
             }
 
-            return View("CreateRecording", model);
+            return Redirect("/RPi/CreateRecording");
         }
 
         [Authorize]
-        public ActionResult EndRecording(string productName, string actionName)
+        public ActionResult EndRecording(string productName, string actionName,string deviceID)
         {
-            IoTHubCloud.InvokeEndRecording("MainDevice", productName, actionName);
-            return View();
+            IoTHubCloud.InvokeEndRecording(deviceID, productName, actionName);
+
+            return Redirect("/Tables/GetPartition");
         }
 
         [Authorize]
@@ -56,10 +84,10 @@ namespace IRPiWebApp.Controllers
             TableResult result = table.Execute(retrieveOperation);
             string irMessageCode = ((IREntity)result.Result).IRMessageCode;
 
-            IoTHubCloud.InvokeTransmit("MainDevice", irMessageCode);
+            IoTHubCloud.InvokeTransmit(irPartitionKey, irMessageCode);
             ViewBag.Result = true;
+
             return Redirect("/Tables/GetPartition");
-            //return View();
         }
 
         [Authorize]

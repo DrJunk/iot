@@ -40,8 +40,17 @@ namespace IRPiWebApp.Controllers
         }
 
         [Authorize]
-        public ActionResult GetPartition()
+        public ActionResult GetPartition(string editPartitionKey, string editRowKey)
         {
+            if (editPartitionKey != null)
+            {
+                ViewBag.EditPartitionKey = editPartitionKey;
+                ViewBag.EditRowKey = editRowKey;
+                ViewBag.EditMode = true;
+            }
+            else
+                ViewBag.EditMode = false;
+            
             // The code in this section goes here.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
                 CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
@@ -89,6 +98,31 @@ namespace IRPiWebApp.Controllers
             }
 
             return View(customers);
+        }
+
+        [Authorize]
+        public ActionResult EditIRRecording(string oldPartitionKey, string oldRowKey, string newProductName, string newActionName)
+        {
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+            CloudConfigurationManager.GetSetting("irpistorageaccount_AzureStorageConnectionString"));
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+
+            // Open IRRecording table and retrive the irEntity
+            CloudTable scheduleTable = tableClient.GetTableReference("IRRecordingTable");
+            TableOperation retriveOperation = TableOperation.Retrieve<IREntity>(oldPartitionKey, oldRowKey);
+            TableResult result = scheduleTable.Execute(retriveOperation);
+            IREntity irEntity = (IREntity)result.Result;
+
+            // Delete the old entity
+            TableOperation deleteOperation = TableOperation.Delete(irEntity);
+            result = scheduleTable.Execute(deleteOperation);
+
+            // Insert the update entity
+            irEntity.RowKey = newProductName + ";" + newActionName;
+            TableOperation addOperation = TableOperation.Insert(irEntity);
+            result = scheduleTable.Execute(addOperation);
+            
+            return Redirect("/Tables/GetPartition");
         }
 
         [Authorize]
