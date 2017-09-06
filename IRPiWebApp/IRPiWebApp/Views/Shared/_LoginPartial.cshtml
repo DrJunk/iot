@@ -1,14 +1,11 @@
-﻿@using Microsoft.AspNet.Identity
-
-@if (Request.IsAuthenticated)
+﻿@if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            <a>Hello @(User.Identity.GetUserName()) !</a>
-            <!--@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })-->
+            <a>Hello @(User.Identity.Name) !</a>
         </li>
         <li>
             @if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
@@ -31,7 +28,7 @@ else
         <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li> -->
         @if (!String.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
         {
-            <li>@Html.ActionLink("Log in", "/login/aad", ".auth")</li>
+            <li>@Html.ActionLink("Log in", "/login/google", ".auth")</li>
         }
         else
         {

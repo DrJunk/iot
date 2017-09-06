@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Microsoft.WindowsAzure.Storage.Table.TableEntity>
+@{
+    ViewBag.Title = "Devices";
+}
+
+<h2>Devices</h2>
+
+<table border="1">
+    <tr>
+        <th>Device name</th>
+    </tr>
+    @foreach (var deviceName in Model)
+    {
+        <tr>
+            <td>@deviceName.RowKey</td>
+        </tr>
+    }
+</table>

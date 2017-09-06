@@ -15,7 +15,7 @@
     @foreach (var schedule in Model)
     {
         <tr>
-            <td>@DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(schedule.PartitionKey)).ToString()</td>
+            <td><p name="datetimeCell" hidden="hidden">@long.Parse(schedule.PartitionKey)</p></td>
             <td>@schedule.DeviceID</td>
             @if (schedule.ProductName != null)
             {
@@ -30,3 +30,11 @@
         </tr>
     }
 </table>
+
+<script>
+    var datetimeCells = document.getElementsByName("datetimeCell");
+    datetimeCells.forEach(function (datetimeCell) {
+        datetimeCell.innerText = new Date(parseInt(datetimeCell.innerText));
+        datetimeCell.removeAttribute("hidden");
+    });
+</script>

@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "AddDeviceForm";
+}
+
+<h2>Add device</h2>
+
+@using (Html.BeginForm("AddDevice", "Tables", FormMethod.Post))
+{
+    <input type="text" name="deviceID" required="required">
+    <button type="submit">Add device</button>
+}

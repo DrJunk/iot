@@ -41,7 +41,6 @@ namespace IRPiWebApp.Controllers
         public ActionResult EndRecording(string productName, string actionName)
         {
             IoTHubCloud.InvokeEndRecording("MainDevice", productName, actionName);
-
             return View();
         }
 
@@ -59,7 +58,8 @@ namespace IRPiWebApp.Controllers
 
             IoTHubCloud.InvokeTransmit("MainDevice", irMessageCode);
             ViewBag.Result = true;
-            return View();
+            return Redirect("/Tables/GetPartition");
+            //return View();
         }
 
         [Authorize]

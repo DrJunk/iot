@@ -382,6 +382,9 @@
     <Content Include="Views\RPi\Delete.cshtml" />
     <Content Include="Views\Tables\GetSchedule.cshtml" />
     <Content Include="Views\Tables\SelectTimeSchedule.cshtml" />
+    <Content Include="Views\Tables\ScheduleError.cshtml" />
+    <Content Include="Views\Tables\Devices.cshtml" />
+    <Content Include="Views\Tables\AddDeviceForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
