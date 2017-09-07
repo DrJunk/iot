@@ -6,6 +6,6 @@
 
 @using (Html.BeginForm("AddDevice", "Tables", FormMethod.Post))
 {
-    <input type="text" name="deviceID" required="required">
-    <button type="submit">Add device</button>
+    <input type="text" name="deviceID" required="required" class = "form-control" placeholder = "Device ID">
+    <button class="btn btn-default" type="submit">Add device</button>
 }

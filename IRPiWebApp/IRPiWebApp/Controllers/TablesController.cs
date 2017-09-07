@@ -211,11 +211,13 @@ namespace IRPiWebApp.Controllers
             return Redirect("/Tables/Devices");
         }
 
+        [Authorize]
         public ActionResult AddDeviceForm()
         {
             return View();
         }
 
+        [Authorize]
         public ActionResult Devices()
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(

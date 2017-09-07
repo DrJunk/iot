@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -28,10 +29,8 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Recordings", "GetPartition", "Tables")</li>
-                        <li>@Html.ActionLink("Create Recording", "CreateRecording", "RPi")</li>
                         <li>@Html.ActionLink("Schedules", "GetSchedule", "Tables")</li>
                         <li>@Html.ActionLink("Devices", "Devices", "Tables")</li>
-                        <li>@Html.ActionLink("Add Device", "AddDeviceForm", "Tables")</li>
                     }
                     <li>@Html.ActionLink("About", "About", "Home")</li>
 
@@ -45,7 +44,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Google</p>
+            <p>&copy; @DateTime.Now.Year - IRPi</p>
         </footer>
     </div>
 

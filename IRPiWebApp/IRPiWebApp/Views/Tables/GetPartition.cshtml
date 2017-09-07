@@ -3,20 +3,15 @@
 @{
     ViewBag.Title = "GetPartition";
 }
-
-<h2>Get Partition results</h2>
+<h2>Recordings</h2>
 
 @using (Html.BeginForm("EditIRRecording", "Tables", new { oldPartitionKey=ViewBag.EditPartitionKey, oldRowKey=ViewBag.EditRowKey}, FormMethod.Post, null))
 {
-    <table border="1">
+    <table class="table table-hover table-bordered fixed">
         <tr>
             <th>DeviceID</th>
             <th>Product name</th>
             <th>Action name</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
         </tr>
         @if (!ViewBag.EditMode)
         {
@@ -26,10 +21,16 @@
                     <td>@(irEntity.PartitionKey)</td>
                     <td>@(irEntity.RowKey.Split(';')[0])</td>
                     <td>@(irEntity.RowKey.Split(';')[1])</td>
-                    <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
-                    <td>@Html.ActionLink("Schedule", "SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] }, null)</td>
-                    <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
-                    <td>@Html.ActionLink("Edit", "GetPartition", "Tables", new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey }, null)</td>
+                    <td>
+                        <a href='@Url.Action("Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey })'>
+                            <img src="~/Icons/access-point.png" alt="Transmit" /></a>
+                        <a href='@Url.Action("SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] })'>
+                            <img src="~/Icons/schedule.png" alt="Schedule" /></a>
+                        <a href='@Url.Action("GetPartition", "Tables",new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey })'>
+                            <img src="~/Icons/lead-pencil.png" alt="Edit" /></a>
+                        <a href='@Url.Action("Delete", "RPi",new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey })' onclick="return confirm('Damn, I loved this one. Are you sure you wish to delete it?');">
+                            <img src="~/Icons/delete.png" alt="X" /></a>     
+                    </td>
                 </tr>
             }
         }
@@ -43,9 +44,7 @@
                         <td>@(irEntity.PartitionKey)</td>
                         <td><input type="text" name="newProductName" value="@(irEntity.RowKey.Split(';')[0])" /></td>
                         <td><input type="text" name="newActionName" value="@(irEntity.RowKey.Split(';')[1])" /></td>
-                        <td></td>
-                        <td></td>
-                        <td><button type="submit">Save</button></td>
+                        <td><input type="image" src="~/Icons/check.png" alt="X"></td>
                     </tr>
                 }
                 else
@@ -54,13 +53,22 @@
                         <td>@(irEntity.PartitionKey)</td>
                         <td>@(irEntity.RowKey.Split(';')[0])</td>
                         <td>@(irEntity.RowKey.Split(';')[1])</td>
-                        <td>@Html.ActionLink("Transmit Message", "Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, null)</td>
-                        <td>@Html.ActionLink("Schedule", "SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] }, null)</td>
-                        <td>@Html.ActionLink("X", "Delete", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey }, new { onclick = "return confirm('Damn, I loved this one. Are you sure you wish to delete it?');" })</td>
-                        <td>@Html.ActionLink("Edit", "GetPartition", "Tables", new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey }, null)</td>
+                        <td>
+                            <a href='@Url.Action("Transmit", "RPi", new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey })'>
+                                <img src="~/Icons/access-point.png" alt="Transmit" /></a>
+                            <a href='@Url.Action("SetNewSchedule", "Tables", new { deviceID = irEntity.PartitionKey, productName = irEntity.RowKey.Split(';')[0], actionName = irEntity.RowKey.Split(';')[1] })'>
+                                <img src="~/Icons/schedule.png" alt="Schedule" /></a>
+                            <a href='@Url.Action("GetPartition", "Tables",new { editPartitionKey = irEntity.PartitionKey, editRowKey = irEntity.RowKey })'>
+                                <img src="~/Icons/lead-pencil.png" alt="Edit" /></a>
+                            <a href='@Url.Action("Delete", "RPi",new { irPartitionKey = irEntity.PartitionKey, irRowKey = irEntity.RowKey })' onclick="return confirm('Damn, I loved this one. Are you sure you wish to delete it?');">
+                                <img src="~/Icons/delete.png" alt="X" /></a>
+                        </td>
                     </tr>
                 }
             }
         }
     </table>
 }
+
+<input type="button" class="btn btn-default" value="Create New Recording" name="back" onclick="@("location.href='"+ Url.Action("CreateRecording", "RPi")+ "'")" />
+

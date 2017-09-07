@@ -6,7 +6,7 @@
 
 <h2>Now recording</h2>
 
-<select><option>@(ViewBag.DeviceID)</option></select>
-<input value="@(ViewBag.ProductName)" disabled>
-<input value="@(ViewBag.ActionName)" disabled>
-<input type="button" value="End recording" onclick="@("location.href='"+ Url.Action("EndRecording", "RPi", new {productName=ViewBag.ProductName, actionName=ViewBag.ActionName, deviceID=ViewBag.DeviceID})+ "'")" />
+<input value="@(ViewBag.ProductName)" class = "form-control" disabled>
+<input value="@(ViewBag.ActionName)" class = "form-control" disabled>
+<select class="btn btn-primary dropdown-toggle" disabled><option>@(ViewBag.DeviceID)</option></select>
+<input type="button" class="btn btn-default" value="End recording" onclick="@("location.href='"+ Url.Action("EndRecording", "RPi", new {productName=ViewBag.ProductName, actionName=ViewBag.ActionName, deviceID=ViewBag.DeviceID})+ "'")" />

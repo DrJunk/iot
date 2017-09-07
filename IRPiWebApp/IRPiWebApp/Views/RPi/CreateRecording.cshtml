@@ -8,11 +8,10 @@
 
 @using (Html.BeginForm("StartRecording", "RPi", FormMethod.Post))
 {
-    @Html.DropDownListFor(model => model.DeviceID, new SelectList(ViewBag.Devices))
-    @Html.TextBoxFor(model => model.ProductName)
+    @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", placeholder = "Product Name"})
     @Html.ValidationMessageFor(model => model.ProductName)
-    @Html.TextBoxFor(model => model.ActionName)
+    @Html.TextBoxFor(model => model.ActionName, new { @class = "form-control" , placeholder = "Action Name" })
     @Html.ValidationMessageFor(model => model.ActionName)
-
-    <button type="submit">Start</button>
+    @Html.DropDownListFor(model => model.DeviceID, new SelectList(ViewBag.Devices), new { @class = "btn btn-primary dropdown-toggle" })
+    <button type="submit" class="btn btn-default">Start</button>
 }

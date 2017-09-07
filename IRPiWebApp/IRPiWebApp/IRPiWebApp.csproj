@@ -307,11 +307,17 @@
   <ItemGroup>
     <Content Include="Content\AboutUs.css" />
     <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Icons\access-point.png" />
+    <Content Include="Icons\check.png" />
+    <Content Include="Icons\delete.png" />
+    <Content Include="Icons\lead-pencil.png" />
+    <Content Include="Icons\megic.png" />
+    <Content Include="Icons\schedule.png" />
+    <Content Include="Icons\table-edit.png" />
     <Content Include="Images\pic03.jpg" />
     <Content Include="Images\pic04.jpg" />
     <Content Include="Images\pic05.jpg" />
