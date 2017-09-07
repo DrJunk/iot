@@ -1,0 +1,3 @@
+IRPi is a universal IR remote based on Raspberry Pi.
+It allows you to control any IR-based device such as TVs, set-top boxes and air conditioners. IRPi controls mulitple devices from the cloud using a simple and intuitive interface.
+

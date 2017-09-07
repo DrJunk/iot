@@ -91,7 +91,7 @@
     </header>
 
     <!-- Page Content -->
-    <section class="py-5">
+    <section class="py-5"  style="background-color:red">
       <div class="container">
         <h1>What is IRPi?</h1>
         <p>IRPi is a universal IR remote based on Raspberry Pi. It allows you to control any IR-based device such as TVs, set-top boxes and air conditioners. IRPi controls mulitple devices from the cloud using a simple and intuitive interface.</p>
@@ -100,12 +100,10 @@
       </div>
     </section>
 
-    <section class="py-5">
+    <section class="py-5" style="background-color:lightblue;">
       <div class="container">
         <h1>Demo</h1>
         <p>Youtube Video</p>
-        <!--<p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the
-          <code>half-slider.css</code>file.</p>-->
       </div>
     </section>
 
@@ -119,24 +117,81 @@
           <li>Set timers for future remote commands</li>          
           <li>Access manually through easy HTTP Requests</li>
         </ul>
-
-        <!--<p>The background images for the slider are set directly in the HTML using inline CSS. The rest of the styles for this template are contained within the
-          <code>half-slider.css</code>file.</p>-->
       </div>
     </section>
 
     <section class="py-5">
       <div class="container">
-        <h1>Putting the IR in IRPi</h1>
-        <p>IRPi is a universal IR remote based on Raspberry Pi. It allows you to control any IR-based device such as TVs, set-top boxes and air conditioners. IRPi controls mulitple devices from the cloud using a simple and intuitive interface.</p>
+        <h1>Building the IRPi</h1>
+        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The following diagram shows the wiring of the IRPi:</p>
+
+        <img src="photos/breadboard_with_info.png" margin-bottom="20px" margin-top="20px" width="70%">
+
       </div>
     </section>
 
     <section class="py-5">
       <div class="container">
-        <h1>Communication and the cloud</h1>
-        <p>IRPi is a universal IR remote based on Raspberry Pi. It allows you to control any IR-based device such as TVs, set-top boxes and air conditioners. IRPi controls mulitple devices from the cloud using a simple and intuitive interface.</p>
+        <h2>Putting the IR in IRPi</h2>
+        <p>IR is a light wave with a longer length than red light - this makes it invisible to the human eye. Since most day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'high' signal. This can be explained simply in the following diagram.</p>
+
+        <img src="photos/ir_signal.png" margin-bottom="20px">
+
+        <p>In order to read and transmit IR codes from the receiver, we used the GPIO library provided by microsoft.<br>
+        For reading signals, we used the GPIOChangeReader class provided by microsoft. It uses DMA to record fast changes in the IR receiver signal, which we can later read from the device using the class.<br>
+        Transmitting was a bigger challenge for us. Using software only to obtain an accurate and reliable 38Khz rate wasn't succesful. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard.</p>
       </div>
+    </section>
+
+    <section class="py-5">
+      <div class="container">
+        <h1>Communication with the cloud</h1>
+        <p>Our project's communcation is done through several cloud services provideed by Microsoft Azure. The main parts are:</p>
+        <ul>
+          <li>Azure App Service - Web App</li>        
+          <li>Cloud Storage - Azure Storage Table</li>
+          <li>Azure Functions</li>       
+          <li>IoT Hub</li>
+        </ul>
+        <p>The following diagram explains the interactions between these services:</p>
+
+        <img src="photos/cloud_communication.png" margin-bottom="20px" width="100%">
+      </div>
+
+      <div class="container">
+        <h1>Communication with the cloud</h1>
+        <p>Our project's communcation is done through several cloud services provideed by Microsoft Azure. The main parts are:</p>
+        <ul>
+          <li>Azure App Service - Web App</li>        
+          <li>Cloud Storage - Azure Storage Table</li>
+          <li>Azure Functions</li>       
+          <li>IoT Hub</li>
+        </ul>
+        <p>The following diagram explains the interactions between these services:</p>
+
+        <img src="photos/cloud_communication.png" margin-bottom="20px" width="100%">
+      </div>
+
+      <div class="container">
+        <h4>IoT Hub</h4>
+        <p>Bla</p>
+        <h4>Web App</h4>
+        <p>Bla</p>
+        <h4>Azure Functions</h4>
+        <p>Bla</p>
+        <h4>Azure cloud Table</h4>
+        <p>Bla</p>
+
+        <h2>Communication examples</h2>
+   		<h4>Trasnmit</h4>
+        <p>Bla</p>
+        <h4>Record</h4>
+        <p>Bla</p>
+        <h4>Schedule</h4>
+        <p>Bla</p>
+
+      </div>
+
     </section>
 
 
