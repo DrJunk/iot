@@ -30,19 +30,19 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
+                <!--<span class="sr-only">(current)</span>-->
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="#about">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Code</a>
+              <a class="nav-link" href="#code">Code</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+              <a class="nav-link" href="#contact">Contact</a>
             </li>
           </ul>
         </div>
@@ -92,7 +92,7 @@
     </header>
 
     <!-- Page Content -->
-    <section class="py-5"  style="background-color:red">
+    <section id="about" class="py-5"  style="background-color:pink">
       <div class="container">
         <h1>What is IRPi?</h1>
         <p>IRPi is a universal IR remote based on Raspberry Pi. It allows you to control any IR-based device such as TVs, set-top boxes and air conditioners. IRPi controls mulitple devices from the cloud using a simple and intuitive interface.</p>
@@ -101,14 +101,14 @@
       </div>
     </section>
 
-    <section class="py-5" style="background-color:lightblue;">
+    <section class="py-5"">
       <div class="container">
         <h1>Demo</h1>
         <p>Youtube Video</p>
       </div>
     </section>
 
-    <section class="py-5">
+    <section class="py-5" style="background-color:lightblue;">
       <div class="container">
         <h1>Features</h1>
         <ul>
@@ -131,7 +131,7 @@
       </div>
     </section>
 
-    <section class="py-5">
+    <section class="py-5"  style="background-color:lightblue">
       <div class="container">
         <h2>Putting the IR in IRPi</h2>
         <p>IR is a light wave with a longer length than red light - this makes it invisible to the human eye. Since most day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'high' signal. This can be explained simply in the following diagram.</p>
@@ -159,21 +159,7 @@
         <img src="photos/cloud_communication.png" margin-bottom="20px" width="100%">
       </div>
 
-      <div class="container">
-        <h1>Communication with the cloud</h1>
-        <p>Our project's communcation is done through several cloud services provideed by Microsoft Azure. The main parts are:</p>
-        <ul>
-          <li>Azure App Service - Web App</li>        
-          <li>Cloud Storage - Azure Storage Table</li>
-          <li>Azure Functions</li>       
-          <li>IoT Hub</li>
-        </ul>
-        <p>The following diagram explains the interactions between these services:</p>
-
-        <img src="photos/cloud_communication.png" margin-bottom="20px" width="100%">
-      </div>
-
-      <div class="container">
+      <div class="container" >
         <h4>IoT Hub</h4>
         <p>Bla</p>
         <h4>Web App</h4>
@@ -196,7 +182,16 @@
     </section>
 
 
-	<section id="two" class="wrapper style1 special">
+    <section id="code" class="py-5">
+      <div class="container">
+        <h1>Source & Documentation</h1>
+		<h2>Link to GitHub</h2>
+             
+      </div>
+    </section>
+
+
+	<section id="contact" class="wrapper style1 special">
 	    <div class="inner">
 	        <header>
 	            <h2>Ipsum Feugiat</h2>
