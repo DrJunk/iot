@@ -121,20 +121,10 @@
       </div>
     </section>
 
-    <section class="py-5">
-      <div class="container">
-        <h1>Building the IRPi</h1>
-        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency.  We also connected a green LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
-
-        <img src="photos/breadboard_with_info.png" margin-bottom="20px" margin-top="20px" width="70%">
-
-      </div>
-    </section>
-
     <section class="py-5"  style="background-color:lightblue">
       <div class="container">
         <h2>Putting the IR in IRPi</h2>
-        <p>IR is a light wave with a longer length than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
+        <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
 
         <img src="photos/ir_signal.png" margin-bottom="20px">
 
@@ -142,6 +132,16 @@
 		Since we worked with Windows 10, which is not a real time operating system, this part was quite challenging. As explained earlier, to recive and transmit IR codes there is a need to change from high to low voltage in a 38kHz frequency. Altough the RPi is fast enough, the operation system often stops the code in order to maintain itself. Therefore our naive attempts to obtain an accurate and reliable 38kHz rate failed and we had to find smarter solutions.<br>
         For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class provided by microsoft. It places timestamps in kernal mode to record fast changes in the IR receiver signal, which we can later read from the device in user mode.<br>
         Transmitting was a bigger challenge for us. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard. The '555 timer' modulates a 38kHz frequency, and we use the GPIO to enable or disable the timer. The output of the timer is connected to the IR LED.</p>
+      </div>
+    </section>
+	
+    <section class="py-5">
+      <div class="container">
+        <h1>Building the IRPi</h1>
+        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
+
+        <img src="photos/breadboard_with_info.png" margin-bottom="20px" margin-top="20px" width="70%">
+
       </div>
     </section>
 
@@ -198,6 +198,20 @@
         <h1>Source & Documentation</h1>
 		<h2>Link to GitHub</h2>
              
+      </div>
+    </section>
+	
+	<section class="py-5"  style="background-color:lightblue">
+      <div class="container">
+        <h2>API</h2>
+        <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
+
+        <img src="photos/ir_signal.png" margin-bottom="20px">
+
+        <p>In order to read and transmit IR codes, we used the GPIO library provided by microsoft. It allows to read and write to the GPIO pins on the RPi.<br>
+		Since we worked with Windows 10, which is not a real time operating system, this part was quite challenging. As explained earlier, to recive and transmit IR codes there is a need to change from high to low voltage in a 38kHz frequency. Altough the RPi is fast enough, the operation system often stops the code in order to maintain itself. Therefore our naive attempts to obtain an accurate and reliable 38kHz rate failed and we had to find smarter solutions.<br>
+        For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class provided by microsoft. It places timestamps in kernal mode to record fast changes in the IR receiver signal, which we can later read from the device in user mode.<br>
+        Transmitting was a bigger challenge for us. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard. The '555 timer' modulates a 38kHz frequency, and we use the GPIO to enable or disable the timer. The output of the timer is connected to the IR LED.</p>
       </div>
     </section>
 
