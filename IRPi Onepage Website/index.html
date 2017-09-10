@@ -76,7 +76,7 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - Set the background image for this slide in the line below -->
-          <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
+          <div class="carousel-item active" style="background-image: url(https://ak5.picdn.net/shutterstock/videos/22213399/thumb/1.jpg)">
             <div class="carousel-caption d-none d-md-block">
               <h3>IRPi - the Universal IR Remote</h3>
               <p>This is a description for the first slide.</p>
@@ -206,11 +206,23 @@
 			<li>The Web app asks the Storage Table for the appropriate IR message in the IRRecordingTable with the information from the GET request.</li>
 			<li>The Storage Table retrievs the IR message and sents is back to the Web app.</li>
 			<li>The Web app invokes a direct method which tells the IoT Hub which device should transmit and what message.</li>
-			<li>The IoT then communcates with the chosen device and forwards him the IR message to transmit.</li>
+			<li>The IoT then communicates with the chosen device and forwards him the IR message to transmit.</li>
 		</ol> 
 		
         <h4>Record</h4>
-        <p>Bla</p>
+        <p>The following diagram explains what happens when a web user wishes to record a new message:</p>
+		<img src="photos/recording_diagram.png" margin-bottom="20px" width="80%">
+		<ol>
+			<li>The web user chooses a device, product name and action name and then clicks a button to start recording. After the click, a GET request is sent to the Web app with the device ID.</li>
+			<li>The Web app then invokes a direct method which tells the IoT Hub which device should <b>start</b> recording.</li>
+			<il>The IoT communicates with the chosen device and tell it to start recording.</il>
+			<il>When the web user wishes to end the recording, he presses the appropriate button. This sends a GET request to the Web app with the device ID, product name and action name as parameters.</il>
+			<li>The Web app then invokes a direct method which tells the IoT Hub which device should <b>stop</b> recording. It also forwards the product name and action name chosen by the web user.</li>
+			<li>The IoT then communicates with the chosen device and tells him to end the recording and gives him the rest of the parameters.</li>
+			<li>The chosen device sends a D2C (Device to Cloud) message with the recording, product name and action name.</li>
+			<li>An Azure Function listens to messages from endpoint devices. When a D2C message is sent from a device the Azure Function handles it.</li>
+			<li>The Azure Function inserts a new item to IRRecordingTable with the given IR message, product name, action name and device ID. 
+		</ol>
         <h4>Schedule</h4>
         <p>The following diagram explains the proccess of making a shedule and auto executing it:</p>
 		<img src="photos/schedule_diagram.png" margin-bottom="20px" width="80%">
