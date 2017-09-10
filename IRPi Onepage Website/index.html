@@ -172,7 +172,17 @@
 
         <h2>Communication examples</h2>
    		<h4>Trasnmit</h4>
-        <p>Bla</p>
+		<p>When a user clicks on a transmit button </p>
+		<img src="photos/transmit_diagram.png" margin-bottom="20px" width="80%">
+		<p>The following diagram explains what happens when a user clicks on a transmit button:</p>
+		<ol>
+			<li>A GET request is sent to the Web app sufficient info to know which IR message the user clicked on.</li>
+			<li>The Web app asks the Storage Table for the appropriate IR message in the IRRecordingTable with the information from the GET request.</li>
+			<li>The Storage Table retrievs the IR message and sents is back to the Web app.</li>
+			<li>The Web app invokes a direct method which tells the IoT Hub which device should transmit and what message.</li>
+			<li>The IoT then communcates with the chosen divice and the actual IR message with then be transmited by the divice.</li>
+		</ol> 
+		
         <h4>Record</h4>
         <p>Bla</p>
         <h4>Schedule</h4>
