@@ -39,10 +39,28 @@
               <a class="nav-link" href="#about">About</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="#demo">Demo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#ir">IR</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#circuit">Circuit</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cloud">Cloud</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#api">API</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#code">Code</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#contact">Contact</a>
+              <a class="nav-link" href="#us">Us</a>
             </li>
           </ul>
         </div>
@@ -101,14 +119,14 @@
       </div>
     </section>
 
-    <section class="py-5"">
+    <section class="py-5" id="demo">
       <div class="container">
         <h1>Demo</h1>
         <p>Youtube Video</p>
       </div>
     </section>
 
-    <section class="py-5" style="background-color:lightblue;">
+    <section class="py-5" id="features" style="background-color:lightblue;">
       <div class="container">
         <h1>Features</h1>
         <ul>
@@ -121,7 +139,7 @@
       </div>
     </section>
 
-    <section class="py-5"  style="background-color:lightblue">
+    <section class="py-5" id="ir" style="background-color:pink">
       <div class="container">
         <h2>Putting the IR in IRPi</h2>
         <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
@@ -130,12 +148,12 @@
 
         <p>In order to read and transmit IR codes, we used the GPIO library provided by microsoft. It allows to read and write to the GPIO pins on the RPi.<br>
 		Since we worked with Windows 10, which is not a real time operating system, this part was quite challenging. As explained earlier, to recive and transmit IR codes there is a need to change from high to low voltage in a 38kHz frequency. Altough the RPi is fast enough, the operation system often stops the code in order to maintain itself. Therefore our naive attempts to obtain an accurate and reliable 38kHz rate failed and we had to find smarter solutions.<br>
-        For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class provided by microsoft. It places timestamps in kernal mode to record fast changes in the IR receiver signal, which we can later read from the device in user mode.<br>
+        For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class which places timestamps in kernal mode then later read from the device in user mode, this allows to record fast changes in the IR receiver signal.<br>
         Transmitting was a bigger challenge for us. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard. The '555 timer' modulates a 38kHz frequency, and we use the GPIO to enable or disable the timer. The output of the timer is connected to the IR LED.</p>
       </div>
     </section>
 	
-    <section class="py-5">
+    <section class="py-5" id="circuit">
       <div class="container">
         <h1>Building the IRPi</h1>
         <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
@@ -145,7 +163,7 @@
       </div>
     </section>
 
-    <section class="py-5">
+    <section class="py-5" id="cloud">
       <div class="container">
         <h1>Communication with the cloud</h1>
         <p>Our project's communcation is done through several cloud services provideed by Microsoft Azure. The main parts are:</p>
@@ -164,8 +182,17 @@
         <h4>IoT Hub</h4>
         <p>Bla</p>
         <h4>Web App</h4>
-        <p>Bla</p>
-        <h4>Azure Functions</h4>
+        <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best. In the following paragraph we describe the main pros and cons for each option.</p>
+        <p><b>App Service</b> - This service handles scaling and load balancing. It also allows quick deployment and is relatively easy to use. This service does not allow remote desktop access. If one wish to start using an App Service for an existing site, small changes might be needed.<br>
+		<b>Cloud Service</b> - This is a legacy service and it's recommended not to start new projects using it.<br>
+		<b>Virtual Machine</b> - The main advantage of a Virtual Machine is that you can take a local project and upload it 'as is'. But as this is a Infrastructure-as-a-Service (IaaS) and not a Platform-as-a-Service (Paas), maintenance is needed. Therfore for a new projects IaaS is preferred.<br>
+		<b>Service Fabric</b> - This service is similar to App Service, it makes scaling and load balancing easy, and allows quick deployment. Service Fabric also allows more direct controll over the underlying infrastructure. This service is relatively new.<br>
+		<p>We chose to use App Service because is allows quick deployment and handles scaling. Service Fabric also offers those features, but we don't need the control over the underlying infrastructure and preferred to work with a service that exists for a longer time.</p>
+		</p>
+		<p>
+		Deeper overview can be found in <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">microsoft's site</a>.
+		</p>
+		<h4>Azure Functions</h4>
         <p>Bla</p>
         <h4>Azure cloud Table</h4>
         <p>Bla</p>
@@ -191,6 +218,64 @@
       </div>
 
     </section>
+	
+	<section class="py-5" id="api" style="background-color:lightblue">
+      <div class="container">
+        <h2>API</h2>
+        <p>As time goes by, more and more devices contain computers. The vision behind IoT is to allow communication between all of our devices. It becomes more common for new devices to be controlled by comupters that are connected to the internet. Yet, some important daily devices are still being controlled by an IR remote.
+		Using the API you can now controll those IR devices via simple HTTP requests.</p>
+
+		
+        <h4>How to use the API</h4>
+		<p>In order to use the api, all you need is to send a POST request to the following URL:</p>
+		<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">https:<span style="color: #666666">//</span>irpihandlemessages<span style="color: #666666">.</span>azurewebsites<span style="color: #666666">.</span>net<span style="color: #666666">/</span>api<span style="color: #666666">/</span>HttpGET<span style="color: #666666">-</span>HandleApiCalls
+</pre></div>
+		<p>The request should contain the following parameters: DeviceID, ProductName, ActionName. These can be found on the website.<br>
+		For example, here is a short python code that samples the weather (from OWM, openweathermap.org) and turns on the air conditioner if the temperature is below 20°.</p>
+		
+<!-- HTML generated using hilite.me --><div style="background: #f0f0f0; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">pyowm</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">requests</span>
+<span style="color: #007020; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">json</span>
+<span style="color: #007020; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">time</span> <span style="color: #007020; font-weight: bold">import</span> gmtime, strftime, sleep
+
+owm <span style="color: #666666">=</span> pyowm<span style="color: #666666">.</span>OWM(<span style="color: #4070a0">&#39;XXX&#39;</span>)  <span style="color: #60a0b0; font-style: italic"># Connecting to OWM, place a valid free key instead of XXX</span>
+
+location <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;Tel Aviv,isr&#39;</span>
+
+url <span style="color: #666666">=</span> <span style="color: #4070a0">&#39;https://irpihandlemessages.azurewebsites.net/api/HttpGET-HandleApiCalls&#39;</span>  	<span style="color: #60a0b0; font-style: italic"># API&#39;s url</span>
+turnOnData <span style="color: #666666">=</span> 								<span style="color: #60a0b0; font-style: italic"># Building the data of the post request</span>
+	{<span style="color: #4070a0">&#39;DeviceID&#39;</span> : <span style="color: #4070a0">&#39;MainDevice&#39;</span>,
+          <span style="color: #4070a0">&#39;ProductName&#39;</span> : <span style="color: #4070a0">&#39;aircon&#39;</span>,
+          <span style="color: #4070a0">&#39;ActionName&#39;</span> : <span style="color: #4070a0">&#39;on&#39;</span> }
+		  
+<span style="color: #007020; font-weight: bold">while</span> <span style="color: #007020">True</span>:
+	<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;Checking weather in &quot;</span> <span style="color: #666666">+</span> location <span style="color: #666666">+</span> <span style="color: #4070a0">&quot; &quot;</span> <span style="color: #666666">+</span> strftime(<span style="color: #4070a0">&quot;%Y-%m-</span><span style="color: #70a0d0; font-style: italic">%d</span><span style="color: #4070a0"> %H:%M:%S&quot;</span>, gmtime()))
+	
+	<span style="color: #60a0b0; font-style: italic"># Access the temperature using the pyowm lib</span>
+	observation <span style="color: #666666">=</span> owm<span style="color: #666666">.</span>weather_at_place(location)
+	w <span style="color: #666666">=</span> observation<span style="color: #666666">.</span>get_weather()
+	temperature <span style="color: #666666">=</span> w<span style="color: #666666">.</span>get_temperature(<span style="color: #4070a0">&#39;celsius&#39;</span>)
+	
+	<span style="color: #007020; font-weight: bold">print</span> (temperature)
+	
+	<span style="color: #007020; font-weight: bold">if</span>(temperature[<span style="color: #4070a0">&#39;temp&#39;</span>] <span style="color: #666666">&lt;</span> <span style="color: #40a070">20</span>):
+		r <span style="color: #666666">=</span> requests<span style="color: #666666">.</span>post(url, data <span style="color: #666666">=</span> json<span style="color: #666666">.</span>dumps(turnOnData))	<span style="color: #60a0b0; font-style: italic"># Send a post requset the turns on the air conditioner		</span>
+		<span style="color: #007020; font-weight: bold">print</span>(r<span style="color: #666666">.</span>text)						<span style="color: #60a0b0; font-style: italic"># Print result</span>
+	<span style="color: #007020; font-weight: bold">else</span>:
+		<span style="color: #007020; font-weight: bold">print</span>(<span style="color: #4070a0">&quot;Don&#39;t turn on aircon&quot;</span>)
+		
+	sleep(<span style="color: #40a070">60</span>)
+</pre></div>
+<br>
+
+
+    <h4>How the API works</h4>
+	<p>
+	We've written an Azure Function App that handles the API requests. When a request arrives, the function reads the IR message from the Azure Table and then invokes a direct method similarly to the example from the <a href="#cloud">Communication with the cloud</a> section.
+	</p>
+	
+	</div>
+    </section>
 
 
     <section id="code" class="py-5">
@@ -200,23 +285,19 @@
              
       </div>
     </section>
-	
-	<section class="py-5"  style="background-color:lightblue">
+
+
+    <section class="py-5">
       <div class="container">
-        <h2>API</h2>
-        <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
-
-        <img src="photos/ir_signal.png" margin-bottom="20px">
-
-        <p>In order to read and transmit IR codes, we used the GPIO library provided by microsoft. It allows to read and write to the GPIO pins on the RPi.<br>
-		Since we worked with Windows 10, which is not a real time operating system, this part was quite challenging. As explained earlier, to recive and transmit IR codes there is a need to change from high to low voltage in a 38kHz frequency. Altough the RPi is fast enough, the operation system often stops the code in order to maintain itself. Therefore our naive attempts to obtain an accurate and reliable 38kHz rate failed and we had to find smarter solutions.<br>
-        For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class provided by microsoft. It places timestamps in kernal mode to record fast changes in the IR receiver signal, which we can later read from the device in user mode.<br>
-        Transmitting was a bigger challenge for us. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard. The '555 timer' modulates a 38kHz frequency, and we use the GPIO to enable or disable the timer. The output of the timer is connected to the IR LED.</p>
+        <h1>TODO</h1>
+		<h2>Timezones</h2>
+		<h2>Security</h2>
+		<h2>Scaling</h2>
       </div>
     </section>
 
 
-	<section id="contact" class="wrapper style1 special">
+	<section id="us" class="wrapper style1 special">
 	    <div class="inner">
 	        <header>
 	            <h2>IRPi</h2>
@@ -225,19 +306,19 @@
 	        <div class="flex flex-4">
 	            <div class="box person">
 	                <div class="image round">
-	                    <img src="/Images/pic03.jpg" alt="Omer Kafri" />
+	                    <img src="photos/Omer.jpg" alt="Omer Kafri" />
 	                </div>
 	                <h3>Omer Kafri</h3>
 	            </div>
 	            <div class="box person">
 	                <div class="image round">
-	                    <img src="/Images/pic04.jpg" alt="Amit Atsmon" />
+	                    <img src="photos/Amit.jpg" alt="Amit Atsmon" />
 	                </div>
 	                <h3>Amit Atsmon</h3>
 	            </div>
 	            <div class="box person">
 	                <div class="image round">
-	                    <img src="/Images/pic05.jpg" alt="Gal Wiernik" />
+	                    <img src="photos/Gal.jpg" alt="Gal Wiernik" />
 	                </div>
 	                <h3>Gal Wiernik</h3>
 	            </div>
