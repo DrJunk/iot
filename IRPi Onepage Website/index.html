@@ -124,11 +124,11 @@
     <section class="py-5"  style="background-color:lightblue">
       <div class="container">
         <h2>Putting the IR in IRPi</h2>
-        <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects emmit IR signal naturally, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
+        <p>IR (Infra red) is a light wave with a longer wavelength than red light - this makes it invisible to the human eye. Since many day-to-day objects naturally emmit IR signal, IR remotes/receivers don't simply emmit and record IR; they use a unique protocol. Only when the transmitter modulates IR at a 38Khz frequency, the receiver detects a 'low' signal. This can be explained simply by the following diagram.</p>
 
         <img src="photos/ir_signal.png" margin-bottom="20px">
 
-        <p>In order to read and transmit IR codes, we used the GPIO library provided by microsoft. It allows to read and write to the GPIO pins on the RPi.<br>
+        <p>In order to read and transmit IR codes, we used the GPIO library provided by microsoft. It allows a user to read and write to the GPIO pins on the RPi.<br>
 		Since we worked with Windows 10, which is not a real time operating system, this part was quite challenging. As explained earlier, to recive and transmit IR codes there is a need to change from high to low voltage in a 38kHz frequency. Altough the RPi is fast enough, the operation system often stops the code in order to maintain itself. Therefore our naive attempts to obtain an accurate and reliable 38kHz rate failed and we had to find smarter solutions.<br>
         For reading signals, the IR reciver outputs 'high' or 'low' voltage based on the IR frequency as showen in the last diagram. We used the GPIOChangeReader class provided by microsoft. It places timestamps in kernal mode to record fast changes in the IR receiver signal, which we can later read from the device in user mode.<br>
         Transmitting was a bigger challenge for us. For that purpuse we used a '555 timer' connected to the IR LED on our breadboard. The '555 timer' modulates a 38kHz frequency, and we use the GPIO to enable or disable the timer. The output of the timer is connected to the IR LED.</p>
@@ -172,21 +172,33 @@
 
         <h2>Communication examples</h2>
    		<h4>Trasnmit</h4>
-		<p>When a user clicks on a transmit button </p>
-		<img src="photos/transmit_diagram.png" margin-bottom="20px" width="80%">
 		<p>The following diagram explains what happens when a web user clicks on a transmit button:</p>
+		<img src="photos/transmit_diagram.png" margin-bottom="20px" width="80%">
 		<ol>
 			<li>A GET request is sent to the Web app sufficient info to know which IR message the user clicked on.</li>
 			<li>The Web app asks the Storage Table for the appropriate IR message in the IRRecordingTable with the information from the GET request.</li>
 			<li>The Storage Table retrievs the IR message and sents is back to the Web app.</li>
 			<li>The Web app invokes a direct method which tells the IoT Hub which device should transmit and what message.</li>
-			<li>The IoT then communcates with the chosen divice and forwards him the IR message to transmit.</li>
+			<li>The IoT then communcates with the chosen device and forwards him the IR message to transmit.</li>
 		</ol> 
 		
         <h4>Record</h4>
         <p>Bla</p>
         <h4>Schedule</h4>
-        <p>Bla</p>
+        <p>The following diagram explains the proccess of making a shedule and auto executing it:</p>
+		<img src="photos/schedule_diagram.png" margin-bottom="20px" width="80%">
+		<p>This is what happens when a web user wishes to schedule a new message:</p>
+		<ol>
+			<li>The web user chooses a message to schedule and then sets a trigger time for when it should be trasmited. After a click on the submit button a GET request is sent to the Web app with the appropriate parameters.</li>
+			<li>The Web app adds a new row to the IRScheduleTable with the information from the GET request.</li>
+		</ol>
+		<p>The following proccess is automatic and runs as an Azure Function every minute:</p>
+		<ol type="A">
+			<li>The Azure Function asks for the information stored in IRScheduleTable.</li>
+			<li>The Storage Table retrievs the desired table and sends it back to the Azure Function.</li>
+			<li>For every message in the table that its schedule time arrived, the Azure Function ivokes a direct method to tell the IoT Hub which device should transmit and what message.</li>
+			<li>The IoT then communcates with the chosen device and forwards him the IR message to transmit.</li>
+		</ol> 
 
       </div>
 
