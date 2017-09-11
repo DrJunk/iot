@@ -192,7 +192,19 @@
 		Deeper overview can be found <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">here</a>.
 		</p>
 		<h4>Azure Functions</h4>
-        <p>Bla</p>
+        <p>Azure Functions are a strong tool given by Azure. They allow to run short pieces of code without building an application or infrastructure around them.<br>
+		When using Azure Functions, there are 2 possible types of pricing plans:
+		<ul>
+          <li><b>Consumption plan</b> - pay for the time your code runs.</li>      
+          <li><b>App Service plan</b> - run your Azure Functions on the infrastructure used for an existing App Service with no additional cost.</li>
+        </ul>
+		As we host our site using an App Service, we chose the App Service plan.</p>
+		<p>
+		We have coded 3 Azure Functions:<br>
+		<b>Store recordings</b> - This function is triggered when a D2C (Device to Cloud) message arrives to the IoT Hub. The function parses the message and insert it to an Azure Storage Table named IRRecordingTable.<br>
+		<b>Execute schedule tasks</b> - This function is triggered once a minute. For any message in the Azure Storage Table named IRScheduleTable, it checkes wheter it should be transmitted now, and if so the function invokes a corresponding direct method.<br>
+		<b>Handle API calls</b> - This function is triggered when an HTTP Post request is sent to it's URI. It handles requests that contain the following parameters: DeviceID, ProductName and ActionName. For any such request it reads the wanted IR message from IRRecordingTable and invokes a direct method for the relevant device.<br>
+		</p>
         <h4>Azure cloud Table</h4>
         <p>Bla</p>
 
@@ -218,7 +230,7 @@
 			<il>When the web user wishes to end the recording, he presses the appropriate button. This sends a GET request to the Web app with the device ID, product name and action name as parameters.</il>
 			<li>The Web app then invokes a direct method which tells the IoT Hub which device should <b>stop</b> recording. It also forwards the product name and action name chosen by the web user.</li>
 			<li>The IoT then communicates with the chosen device and tells him to end the recording and gives him the rest of the parameters.</li>
-			<li>The chosen device sends a D2C (Device to Cloud) message with the recording, product name and action name.</li>
+			<li>The chosen device sends a D2C message with the recording, product name and action name.</li>
 			<li>An Azure Function listens to messages from endpoint devices. When a D2C message is sent from a device the Azure Function handles it.</li>
 			<li>The Azure Function inserts a new item to IRRecordingTable with the given IR message, product name, action name and device ID. 
 		</ol>
