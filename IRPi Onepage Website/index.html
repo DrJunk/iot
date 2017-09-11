@@ -36,7 +36,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#about">About</a>
+              <a class="nav-link" href="#about">IRPi</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#demo">Demo</a>
@@ -60,7 +60,7 @@
               <a class="nav-link" href="#code">Code</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#us">Us</a>
+              <a class="nav-link" href="#us">About</a>
             </li>
           </ul>
         </div>
@@ -78,8 +78,8 @@
           <!-- Slide One - Set the background image for this slide in the line below -->
           <div class="carousel-item active" style="background-image: url(https://ak5.picdn.net/shutterstock/videos/22213399/thumb/1.jpg)">
             <div class="carousel-caption d-none d-md-block">
-              <h3>IRPi - the Universal IR Remote</h3>
-              <p>This is a description for the first slide.</p>
+              <h3>IRPi</h3>
+              <p>The Universal IoT IR Remote.</p>
             </div>
           </div>
 
@@ -156,10 +156,10 @@
     <section class="py-5" id="circuit">
       <div class="container">
         <h1>Building the IRPi</h1>
-        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
+        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green* LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
 
         <img src="photos/breadboard_with_info.png" margin-bottom="20px" margin-top="20px" width="70%">
-
+		<p>* Don't use a red LED for debugging! It might interfere with the IR receiver.</p>
       </div>
     </section>
 
@@ -182,24 +182,32 @@
         <h4>IoT Hub</h4>
         <p>IoT Hub is a service that was designed for IoT device connectivity, and this is the main reason for choosing this exact service. The IoT Hub provides per-device identity and revocable access control, which is crucial for IoT in general and particulary for IRPi - we have to ensure that the users are safe, or else a hacker can contol frequently used item in the victim's house or houses. IoT Hub is also optimized for scaling, can support millions of simultaneously connected devices. This a big part of IRPi, the goal is to let everyone control every IR device from anywhere.</p>
         <h4>Web App</h4>
-        <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best. In the following paragraph we describe the main pros and cons for each option.</p>
+        <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best - it allows quick deployment and handles scaling. In the following paragraph we describe the main pros and cons for each option.</p>
         <p><b>App Service</b> - This service handles scaling and load balancing. It also allows quick deployment and is relatively easy to use. This service does not allow remote desktop access. If one wish to start using an App Service for an existing site, small changes might be needed.<br>
-		<b>Cloud Service</b> - This is a legacy service and it's recommended not to start new projects using it.<br>
-		<b>Virtual Machine</b> - The main advantage of a Virtual Machine is that you can take a local project and upload it 'as is'. But as this is a Infrastructure-as-a-Service (IaaS) and not a Platform-as-a-Service (Paas), maintenance is needed. Therfore for a new projects IaaS is preferred.<br>
-		<b>Service Fabric</b> - This service is similar to App Service, it makes scaling and load balancing easy, and allows quick deployment. Service Fabric also allows more direct controll over the underlying infrastructure. This service is relatively new.<br>
-		<p>We chose to use App Service because is allows quick deployment and handles scaling. Service Fabric also offers those features, but we don't need the control over the underlying infrastructure and preferred to work with a service that exists for a longer time.</p>
+		<b>Cloud Service</b> - This is a legacy service and it's recommended not to use it in new projects.<br>
+		<b>Virtual Machine</b> - The main advantage of a Virtual Machine is that you can take a local project and upload it 'as is'. But as this is a Infrastructure-as-a-Service (IaaS) and not a Platform-as-a-Service (Paas), maintenance is needed. Therfore for a new projects PaaS is preferred.<br>
+		<b>Service Fabric</b> - This service is similar to App Service, it makes scaling and load balancing easy, and allows quick deployment. Service Fabric also allows more direct controll over the underlying infrastructure. This service is relatively new.<br>Service Fabric also offers the features we need, but we don't need the control over the underlying infrastructure and preferred to work with a service that exists for a longer time.</p>
 		</p>
 		<p>
-		Deeper overview can be found in <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">microsoft's site</a>.
+		Deeper overview can be found <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">here</a>.
 		</p>
 		<h4>Azure Functions</h4>
-        <p>Bla</p>
+        <p>Azure Functions are a strong tool given by Azure. They allow to run short pieces of code without building an application or infrastructure around them.<br>
+		When using Azure Functions, there are 2 possible types of pricing plans:
+		<ul>
+          <li><b>Consumption plan</b> - pay for the time your code runs.</li>      
+          <li><b>App Service plan</b> - run your Azure Functions on the infrastructure used for an existing App Service with no additional cost.</li>
+        </ul>
+		As we host our site using an App Service, we chose the App Service plan.</p>
+		<p>
+		We have coded 3 Azure Functions:<br>
+		<b>Store recordings</b> - This function is triggered when a D2C (Device to Cloud) message arrives to the IoT Hub. The function parses the message and insert it to an Azure Storage Table named IRRecordingTable.<br>
+		<b>Execute schedule tasks</b> - This function is triggered once a minute. For any message in the Azure Storage Table named IRScheduleTable, it checkes wheter it should be transmitted now, and if so the function invokes a corresponding direct method.<br>
+		<b>Handle API calls</b> - This function is triggered when an HTTP Post request is sent to it's URI. It handles requests that contain the following parameters: DeviceID, ProductName and ActionName. For any such request it reads the wanted IR message from IRRecordingTable and invokes a direct method for the relevant device.<br>
+		</p>
         <h4>Azure Storage Table</h4>
         <p>There are two main data bases that Azure provides, these are Azure Storage Table and SQL Azure. SQL Azure is greate for when you want to work with structured data using relations, indexes, constraints,  while Azure Table Storage is great for centralized structured data without relations. Each row in an Azure Storage Table is unikly defined by a PartitionKey and a RowKey, they're also used for physically partitioning the tables, which provides for load balancing and scalability.<br>
 		We chose to work with Azure Storage Table rather than SQL Azure because of the load balancing and scalability factor and also because it is much cheaper when you work with bulk storage.</p>
-		
-  		
- The main thing in which Azure SQL is better than Azure Storage Table is when you want to work with structured data using relations, indexes, constraints, etc.
         <h2>Communication examples</h2>
    		<h4>Trasnmit</h4>
 		<p>The following diagram explains what happens when a web user clicks on a transmit button:</p>
@@ -222,7 +230,7 @@
 			<li>When the web user wishes to end the recording, he presses the appropriate button. This sends a GET request to the Web app with the device ID, product name and action name as parameters.</li>
 			<li>The Web app then invokes a direct method which tells the IoT Hub which device should <b>stop</b> recording. It also forwards the product name and action name chosen by the web user.</li>
 			<li>The IoT then communicates with the chosen device and tells him to end the recording and gives him the rest of the parameters.</li>
-			<li>The chosen device sends a D2C (Device to Cloud) message with the recording, product name and action name.</li>
+			<li>The chosen device sends a D2C message with the recording, product name and action name.</li>
 			<li>An Azure Function listens to messages from endpoint devices. When a D2C message is sent from a device the Azure Function handles it.</li>
 			<li>The Azure Function inserts a new item to IRRecordingTable with the given IR message, product name, action name and device ID. 
 		</ol>
@@ -316,12 +324,20 @@ turnOnData <span style="color: #666666">=</span> 								<span style="color: #60
 
     <section class="py-5">
       <div class="container">
-        <h1>TODO</h1>
+        <h1>Miscellaneous</h1>
 		<h2>Timezones</h2>
 		<p>Don't know if you noticed, but we went the extra mile and implemented the user timezone inside the scheduling proccess. The schedule table stores the trigger time in respect to GMT +00:00, this means that when we insert and retrieve items from the table we must do it with respect to the user's current timezone.<p>
 		<h2>Security</h2>
+		<p>
+		The dream of IoT to become part of every device in our houses can become a nightmare if we won't take care of security. As this is a prototype project, we did not provide full security. On the other hand, we did note the steps that should be taken to add security and took them into count while working on other fronts.<br>
+		We used Azure Authentication for App Services to create a friendly login (with google accounts) and made sure that inner pages can only be accessed by verified users. Another option we used is to keep the data in our Azure Tables encoded, this is an option that can be controled via the Azure Portal.<br>
+		We believe that the next security concern that needs treatment is to change the way we identify devices. Instead of giving any device a name, we should have a long random key for each device, then we can ask for this key at request to invoke a direct method. We should also add timestamps for this requests to avoid replay attacks.
+		</p>
 		<h2>Scaling</h2>
-      </div>
+		<p>
+		The ability to scale is an important property that might be hidden when the project is in the 'Proof of Concept' stage. However, the entire structure of our project is built to allow scaling. Through the <a href='#cloud'>Communication with the cloud</a> section, the explenations behind our choices convince that we used the right tools to allow Azure take care of the scaling for us.
+		</p>
+	  </div>
     </section>
 
 
