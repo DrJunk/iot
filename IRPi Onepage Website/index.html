@@ -324,11 +324,19 @@ turnOnData <span style="color: #666666">=</span> 								<span style="color: #60
 
     <section class="py-5">
       <div class="container">
-        <h1>TODO</h1>
+        <h1>Miscellaneous</h1>
 		<h2>Timezones</h2>
 		<h2>Security</h2>
+		<p>
+		The dream of IoT to become part of every device in our houses can become a nightmare if we won't take care of security. As this is a prototype project, we did not provide full security. On the other hand, we did note the steps that should be taken to add security and took them into count while working on other fronts.<br>
+		We used Azure Authentication for App Services to create a friendly login (with google accounts) and made sure that inner pages can only be accessed by verified users. Another option we used is to keep the data in our Azure Tables encoded, this is an option that can be controled via the Azure Portal.<br>
+		We believe that the next security concern that needs treatment is to change the way we identify devices. Instead of giving any device a name, we should have a long random key for each device, then we can ask for this key at request to invoke a direct method. We should also add timestamps for this requests to avoid replay attacks.
+		</p>
 		<h2>Scaling</h2>
-      </div>
+		<p>
+		The ability to scale is an important property that might be hidden when the project is in the 'Proof of Concept' stage. However, the entire structure of our project is built to allow scaling. Through the <a href='#cloud'>Communication with the cloud</a> section, the explenations behind our choices convince that we used the right tools to allow Azure take care of the scaling for us.
+		</p>
+	  </div>
     </section>
 
 
