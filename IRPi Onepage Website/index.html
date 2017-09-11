@@ -36,7 +36,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#about">About</a>
+              <a class="nav-link" href="#about">IRPi</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#demo">Demo</a>
@@ -60,7 +60,7 @@
               <a class="nav-link" href="#code">Code</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#us">Us</a>
+              <a class="nav-link" href="#us">About</a>
             </li>
           </ul>
         </div>
@@ -78,8 +78,8 @@
           <!-- Slide One - Set the background image for this slide in the line below -->
           <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080')">
             <div class="carousel-caption d-none d-md-block">
-              <h3>IRPi - the Universal IR Remote</h3>
-              <p>This is a description for the first slide.</p>
+              <h3>IRPi</h3>
+              <p>The Universal IoT IR Remote.</p>
             </div>
           </div>
 
@@ -156,10 +156,10 @@
     <section class="py-5" id="circuit">
       <div class="container">
         <h1>Building the IRPi</h1>
-        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
+        <p>The universal remote is built from the following- a Raspberry Pi 3, an IR receiver and an IR transmitter (LED). The IR LED is connected to a 555 timer that modulates a 38kHz frequency. It also contains a green* LED for debugging and a pushbutton to accept input. The following diagram shows the wiring of the IRPi:</p>
 
         <img src="photos/breadboard_with_info.png" margin-bottom="20px" margin-top="20px" width="70%">
-
+		<p>* Don't use a red LED for debugging! It might interfere with the IR receiver.</p>
       </div>
     </section>
 
@@ -182,15 +182,14 @@
         <h4>IoT Hub</h4>
         <p>Bla</p>
         <h4>Web App</h4>
-        <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best. In the following paragraph we describe the main pros and cons for each option.</p>
+        <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best - it allows quick deployment and handles scaling. In the following paragraph we describe the main pros and cons for each option.</p>
         <p><b>App Service</b> - This service handles scaling and load balancing. It also allows quick deployment and is relatively easy to use. This service does not allow remote desktop access. If one wish to start using an App Service for an existing site, small changes might be needed.<br>
-		<b>Cloud Service</b> - This is a legacy service and it's recommended not to start new projects using it.<br>
-		<b>Virtual Machine</b> - The main advantage of a Virtual Machine is that you can take a local project and upload it 'as is'. But as this is a Infrastructure-as-a-Service (IaaS) and not a Platform-as-a-Service (Paas), maintenance is needed. Therfore for a new projects IaaS is preferred.<br>
-		<b>Service Fabric</b> - This service is similar to App Service, it makes scaling and load balancing easy, and allows quick deployment. Service Fabric also allows more direct controll over the underlying infrastructure. This service is relatively new.<br>
-		<p>We chose to use App Service because is allows quick deployment and handles scaling. Service Fabric also offers those features, but we don't need the control over the underlying infrastructure and preferred to work with a service that exists for a longer time.</p>
+		<b>Cloud Service</b> - This is a legacy service and it's recommended not to use it in new projects.<br>
+		<b>Virtual Machine</b> - The main advantage of a Virtual Machine is that you can take a local project and upload it 'as is'. But as this is a Infrastructure-as-a-Service (IaaS) and not a Platform-as-a-Service (Paas), maintenance is needed. Therfore for a new projects PaaS is preferred.<br>
+		<b>Service Fabric</b> - This service is similar to App Service, it makes scaling and load balancing easy, and allows quick deployment. Service Fabric also allows more direct controll over the underlying infrastructure. This service is relatively new.<br>Service Fabric also offers the features we need, but we don't need the control over the underlying infrastructure and preferred to work with a service that exists for a longer time.</p>
 		</p>
 		<p>
-		Deeper overview can be found in <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">microsoft's site</a>.
+		Deeper overview can be found <a href="https://docs.microsoft.com/en-us/azure/app-service-web/choose-web-site-cloud-service-vm#onprem">here</a>.
 		</p>
 		<h4>Azure Functions</h4>
         <p>Bla</p>
