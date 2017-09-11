@@ -180,7 +180,7 @@
 
       <div class="container" >
         <h4>IoT Hub</h4>
-        <p>Bla</p>
+        <p>IoT Hub is a service that was designed for IoT device connectivity, and this is the main reason for choosing this exact service. The IoT Hub provides per-device identity and revocable access control, which is crucial for IoT in general and particulary for IRPi - we have to ensure that the users are safe, or else a hacker can contol frequently used item in the victim's house or houses. IoT Hub is also optimized for scaling, can support millions of simultaneously connected devices. This a big part of IRPi, the goal is to let everyone control every IR device from anywhere.</p>
         <h4>Web App</h4>
         <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best. In the following paragraph we describe the main pros and cons for each option.</p>
         <p><b>App Service</b> - This service handles scaling and load balancing. It also allows quick deployment and is relatively easy to use. This service does not allow remote desktop access. If one wish to start using an App Service for an existing site, small changes might be needed.<br>
@@ -194,9 +194,12 @@
 		</p>
 		<h4>Azure Functions</h4>
         <p>Bla</p>
-        <h4>Azure cloud Table</h4>
-        <p>Bla</p>
-
+        <h4>Azure Storage Table</h4>
+        <p>There are two main data bases that Azure provides, these are Azure Storage Table and SQL Azure. SQL Azure is greate for when you want to work with structured data using relations, indexes, constraints,  while Azure Table Storage is great for centralized structured data without relations. Each row in an Azure Storage Table is unikly defined by a PartitionKey and a RowKey, they're also used for physically partitioning the tables, which provides for load balancing and scalability.<br>
+		We chose to work with Azure Storage Table rather than SQL Azure because of the load balancing and scalability factor and also because it is much cheaper when you work with bulk storage.</p>
+		
+  		
+ The main thing in which Azure SQL is better than Azure Storage Table is when you want to work with structured data using relations, indexes, constraints, etc.
         <h2>Communication examples</h2>
    		<h4>Trasnmit</h4>
 		<p>The following diagram explains what happens when a web user clicks on a transmit button:</p>
@@ -315,6 +318,7 @@ turnOnData <span style="color: #666666">=</span> 								<span style="color: #60
       <div class="container">
         <h1>TODO</h1>
 		<h2>Timezones</h2>
+		<p>Don't know if you noticed, but we went the extra mile and implemented the user timezone inside the scheduling proccess. The schedule table stores the trigger time in respect to GMT +00:00, this means that when we insert and retrieve items from the table we must do it with respect to the user's current timezone.<p>
 		<h2>Security</h2>
 		<h2>Scaling</h2>
       </div>
