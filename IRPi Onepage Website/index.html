@@ -180,7 +180,7 @@
 
       <div class="container" >
         <h4>IoT Hub</h4>
-        <p>IoT Hub is a service that was designed for IoT device connectivity, and this is the main reason for choosing this exact service. The IoT Hub provides per-device identity and revocable access control, which is crucial for IoT in general and particulary for IRPi - we have to ensure that the users are safe, or else a hacker can contol frequently used item in the victim's house or houses. IoT Hub is also optimized for scaling, can support millions of simultaneously connected devices. This a big part of IRPi, the goal is to let everyone control every IR device from anywhere.</p>
+        <p>IoT Hub is a service that was designed for IoT device connectivity, and this is the main reason for choosing this exact service. The IoT Hub provides per-device identity and revocable access control, which is crucial for IoT in general and particulary for IRPi - we have to ensure that the users are safe, or else a hacker can contol frequently used item in the victim's house or houses. IoT Hub is also optimized for scaling, can support millions of simultaneously connected devices. This is a big part of IRPi, the goal is to let everyone control every IR device from anywhere.</p>
         <h4>Web App</h4>
         <p>Azure suggests few options for hosting websites: App Service, Cloud Service, Virtual Machine, and Service Fabric. We chose to use App Service as it fits our goals best - it allows quick deployment and handles scaling. In the following paragraph we describe the main pros and cons for each option.</p>
         <p><b>App Service</b> - This service handles scaling and load balancing. It also allows quick deployment and is relatively easy to use. This service does not allow remote desktop access. If one wish to start using an App Service for an existing site, small changes might be needed.<br>
@@ -206,7 +206,7 @@
 		<b>Handle API calls</b> - This function is triggered when an HTTP Post request is sent to it's URI. It handles requests that contain the following parameters: DeviceID, ProductName and ActionName. For any such request it reads the wanted IR message from IRRecordingTable and invokes a direct method for the relevant device.<br>
 		</p>
         <h4>Azure Storage Table</h4>
-        <p>There are two main data bases that Azure provides, these are Azure Storage Table and SQL Azure. SQL Azure is greate for when you want to work with structured data using relations, indexes, constraints,  while Azure Table Storage is great for centralized structured data without relations. Each row in an Azure Storage Table is unikly defined by a PartitionKey and a RowKey, they're also used for physically partitioning the tables, which provides for load balancing and scalability.<br>
+        <p>There are two main databases that Azure provides, these are Azure Storage Table and SQL Azure. SQL Azure is great for when you want to work with structured data using relations, indexes, constraints,  while Azure Table Storage is great for centralized structured data without relations. Each row in an Azure Storage Table is unikly defined by a PartitionKey and a RowKey, they're also used for physically partitioning the tables, which provides load balancing and scalability.<br>
 		We chose to work with Azure Storage Table rather than SQL Azure because of the load balancing and scalability factor and also because it is much cheaper when you work with bulk storage.</p>
         <h2>Communication examples</h2>
    		<h4>Trasnmit</h4>
@@ -325,18 +325,18 @@ turnOnData <span style="color: #666666">=</span> 								<span style="color: #60
     <section class="py-5">
       <div class="container">
         <h1>Miscellaneous</h1>
-		<h2>Timezones</h2>
-		<p>Don't know if you noticed, but we went the extra mile and implemented the user timezone inside the scheduling proccess. The schedule table stores the trigger time in respect to GMT +00:00, this means that when we insert and retrieve items from the table we must do it with respect to the user's current timezone.<p>
 		<h2>Security</h2>
 		<p>
-		The dream of IoT to become part of every device in our houses can become a nightmare if we won't take care of security. As this is a prototype project, we did not provide full security. On the other hand, we did note the steps that should be taken to add security and took them into count while working on other fronts.<br>
-		We used Azure Authentication for App Services to create a friendly login (with google accounts) and made sure that inner pages can only be accessed by verified users. Another option we used is to keep the data in our Azure Tables encoded, this is an option that can be controled via the Azure Portal.<br>
-		We believe that the next security concern that needs treatment is to change the way we identify devices. Instead of giving any device a name, we should have a long random key for each device, then we can ask for this key at request to invoke a direct method. We should also add timestamps for this requests to avoid replay attacks.
+		The dream of IoT to become part of every device in our houses can become a nightmare if we won't take care of security. As this is a prototype project, we did not provide full security. On the other hand, we did note the steps that should be taken to add security and took them into account while working on other fronts.<br>
+		We used Azure Authentication for App Services to create a friendly login (with google accounts) and made sure that inner pages can only be accessed by verified users. Furthermore, we turned on the data encryption in the Azure Storage Tables.<br>
+		We believe that the next security concern that needs treatment is to change the way we identify devices. Instead of giving any device a name, we should have a long random key for each device, then we can ask for this key on requests to invoke a direct methods. We should also add timestamps for this requests to avoid replay attacks.
 		</p>
 		<h2>Scaling</h2>
 		<p>
 		The ability to scale is an important property that might be hidden when the project is in the 'Proof of Concept' stage. However, the entire structure of our project is built to allow scaling. Through the <a href='#cloud'>Communication with the cloud</a> section, the explenations behind our choices convince that we used the right tools to allow Azure take care of the scaling for us.
 		</p>
+		<h2>Timezones</h2>
+		<p>Don't know if you noticed, but we went the extra mile and implemented the user timezone inside the scheduling proccess. The schedule table stores the trigger time in respect to GMT +00:00, this means that when we insert and retrieve items to and from the table we must do it with respect to the user's current timezone.<p>
 	  </div>
     </section>
 
